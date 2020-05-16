@@ -1,6 +1,14 @@
 {
+    // Set the default
     "editor.formatOnSave": true,
+    // Enable per-language
     "[php]": {
         "editor.formatOnSave": true
-    }
+    },
+    "prettier.requireConfig": true,
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "prettier.packageManager": "npm",
+    "prettier.configPath": ".prettierrc.json"
 }
