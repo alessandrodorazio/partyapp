@@ -22,6 +22,7 @@ class CreateSongAuthorsTable extends Migration
             $table->foreign('song_id')->references('id')->on('songs');
             $table->foreign('author_id')->references('id')->on('authors');
         });
+
     }
 
     /**
