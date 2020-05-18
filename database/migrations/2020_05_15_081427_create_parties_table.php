@@ -17,7 +17,7 @@ class CreatePartiesTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('party_type'); // 1 = battle, 2 = democracy
-            $table->boolean('private_party')->default(0); // 0 = public, 1 = private
+            $table->tinyInteger('private_party')->default(0); // 0 = public, 1 = private
             $table->bigInteger('owner_id')->unsigned();
             $table->bigInteger('mood_id')->unsigned();
             $table->timestamps();
