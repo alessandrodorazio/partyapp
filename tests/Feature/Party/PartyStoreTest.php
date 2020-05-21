@@ -14,13 +14,22 @@ class PartyStoreTest extends TestCase
      */
     public function testStoreOk()
     {
-        $response = $this->json('POST', 'api/parties', ['name' => 'Party creato testando', 'party_type' => 1, 'private_party' => 1, 'owner_id' => 32, 'mood_id' => 3]);
+        $response = $this->json('POST', 'api/parties',
+            ['name' => 'Party creato testando',
+                'party_type' => 1, 'private_party' => 1,
+                'owner_id' => 32,
+                'mood_id' => 3]);
         $response->assertStatus(200);
     }
 
     public function testStoreWrongPartyType()
     {
-        $response = $this->json('POST', 'api/parties', ['name' => 'Party creato testando', 'party_type' => 6, 'private_party' => 1, 'owner_id' => 32, 'mood_id' => 3]);
+        $response = $this->json('POST', 'api/parties',
+            ['name' => 'Party creato testando',
+                'party_type' => 6,
+                'private_party' => 1,
+                'owner_id' => 32,
+                'mood_id' => 3]);
         $response->assertStatus(422);
     }
 
