@@ -18,6 +18,11 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Radio from "@material-ui/core/Radio";
+import Checkbox from "@material-ui/core/Checkbox";
+import { APIs } from "../constants/requests";
+import * as axios from "axios";
+
+const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 //array creati per simulare risposte dalle api
 const moods = [
@@ -42,7 +47,7 @@ const moods = [
 const playlists = [
     {
         value: "0",
-        label: "Test"
+        label: "Genera una playlist"
     },
     {
         value: "1",
@@ -78,10 +83,11 @@ const useStyles = makeStyles((theme) => ({
     addPartyButton: {
         marginTop: 15
     },
-    createParty: {
-        paper: {
-            width: "50%"
-        }
+    selector: {
+        width: 300
+    },
+    bigInput: {
+        width: "100%"
     }
 }));
 
@@ -94,8 +100,14 @@ const Profile = () => {
     const [expanded, setExpanded] = useState(false);
     const [open, setOpen] = useState(false);
     const [mood, setMood] = useState("0");
-    const [radio, setRadio] = useState("Democracy");
+    const [radio, setRadio] = useState("1");
     const [playlist, setPlaylist] = useState("0");
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [partyName, setPartyName] = useState("");
+
+    const handlePartyNameChange = (event) => {
+        setPartyName(event.target.value);
+    };
 
     const handlePanelChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -119,6 +131,27 @@ const Profile = () => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handlePrivateChange = (event) => {
+        setIsPrivate(event.target.checked);
+    };
+
+    const submitParty = async () => {
+        const body = {
+            name: partyName,
+            party_type: parseInt(radio, 10),
+            private_party: isPrivate ? 1 : 0,
+            owner_id: 1,
+            mood_id: mood
+        };
+        // const response = await fetch("http://127.0.0.1:8000/api/parties", {
+        //     method: "POST",
+        //     headers: { "X-CSRF-TOKEN": csrfToken, "Content-Type": "application/json" },
+        //     credentials: "same-origin",
+        //     body: body
+        // });
+        console.log(body);
     };
 
     return (
@@ -156,11 +189,20 @@ const Profile = () => {
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
                 className={classes.createParty}
+                fullWidth={true}
+                maxWidth="xs"
             >
-                <DialogTitle id="alert-dialog-slide-title">{"Nuovo party"}</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">Nuovo party</DialogTitle>
                 <DialogContent>
                     <div className="create-party-container">
-                        <TextField id="outlined-basic" label="Nome" variant="outlined" />
+                        <TextField
+                            id="outlined-basic"
+                            label="Nome"
+                            variant="outlined"
+                            className={classes.bigInput}
+                            value={partyName}
+                            onChange={handlePartyNameChange}
+                        />
                         <TextField
                             id="outlined-select-mood"
                             select
@@ -168,6 +210,7 @@ const Profile = () => {
                             value={mood}
                             onChange={handleMoodChange}
                             variant="outlined"
+                            className={classes.selector}
                         >
                             {moods.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -182,6 +225,7 @@ const Profile = () => {
                             value={playlist}
                             onChange={handlePlaylistChange}
                             variant="outlined"
+                            className={classes.selector}
                         >
                             {playlists.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -192,9 +236,20 @@ const Profile = () => {
                         <div className="party-type">
                             <FormLabel component="legend">Tipo party</FormLabel>
                             <RadioGroup name="partyType" value={radio} onChange={handleRadioChange}>
-                                <FormControlLabel value="Democracy" control={<Radio />} label="Democracy" />
-                                <FormControlLabel value="Battle" control={<Radio />} label="Battle" />
+                                <FormControlLabel value="1" control={<Radio />} label="Battle" />
+                                <FormControlLabel value="2" control={<Radio />} label="Democracy" />
                             </RadioGroup>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={isPrivate}
+                                        onChange={handlePrivateChange}
+                                        name="private"
+                                        color="primary"
+                                    />
+                                }
+                                label="party privato"
+                            />
                         </div>
                     </div>
                     <DialogContentText id="alert-dialog-slide-description"></DialogContentText>
@@ -203,7 +258,7 @@ const Profile = () => {
                     <Button onClick={handleClose} color="primary">
                         Annulla
                     </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button color="primary" onClick={submitParty}>
                         Crea
                     </Button>
                 </DialogActions>
