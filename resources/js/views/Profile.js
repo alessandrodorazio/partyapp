@@ -1,10 +1,5 @@
 import React, { useState, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -20,7 +15,8 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Radio from "@material-ui/core/Radio";
 import Checkbox from "@material-ui/core/Checkbox";
 import { APIs } from "../constants/requests";
-import * as axios from "axios";
+import { jsonToForm } from "../utilities/functions";
+import PartyCard from "../components/partyCard";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -71,15 +67,6 @@ const useStyles = makeStyles((theme) => ({
             width: "25ch"
         }
     },
-    heading: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: "33.33%",
-        flexShrink: 0
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary
-    },
     addPartyButton: {
         marginTop: 15
     },
@@ -97,7 +84,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Profile = () => {
     const classes = useStyles();
-    const [expanded, setExpanded] = useState(false);
     const [open, setOpen] = useState(false);
     const [mood, setMood] = useState("0");
     const [radio, setRadio] = useState("1");
@@ -107,10 +93,6 @@ const Profile = () => {
 
     const handlePartyNameChange = (event) => {
         setPartyName(event.target.value);
-    };
-
-    const handlePanelChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
     };
 
     const handleMoodChange = (event) => {
@@ -138,45 +120,30 @@ const Profile = () => {
     };
 
     const submitParty = async () => {
-        const body = {
+        const body = jsonToForm({
             name: partyName,
             party_type: parseInt(radio, 10),
             private_party: isPrivate ? 1 : 0,
             owner_id: 1,
             mood_id: mood
-        };
-        // const response = await fetch("http://127.0.0.1:8000/api/parties", {
-        //     method: "POST",
-        //     headers: { "X-CSRF-TOKEN": csrfToken, "Content-Type": "application/json" },
-        //     credentials: "same-origin",
-        //     body: body
-        // });
-        console.log(body);
+        });
+        const response = await fetch(APIs.partyAPIs, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Content-Type": "multipart/form-data",
+                Accept: "*/*"
+            },
+            credentials: "same-origin",
+            body: body
+        });
+        console.log(response);
     };
 
     return (
         <Fragment>
             <div className="party-panel-container">
-                <ExpansionPanel
-                    className={classes.panel}
-                    expanded={expanded === "panel1"}
-                    onChange={handlePanelChange("panel1")}
-                >
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography className={classes.heading}>Test party</Typography>
-                        <Typography className={classes.secondaryHeading}>tipo party/mood</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography>
-                            descrizione del party, codice di adesione, bottone per modificare il party e bottone per
-                            rimuoverlo
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                <PartyCard />
                 <Button variant="outlined" className={classes.addPartyButton} onClick={handleClickOpen} color="primary">
                     Aggiungi un party
                 </Button>

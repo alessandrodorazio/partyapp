@@ -36,7 +36,7 @@ function App(props) {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            News
+                            Party App
                         </Typography>
                         <Button color="inherit">
                             <Link className="login-link" to="/profile">
