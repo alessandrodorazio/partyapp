@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Playlist;
 
 use Tests\TestCase;
 
-class PartyIndexTest extends TestCase
+class PlaylistIndexTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -13,8 +13,7 @@ class PartyIndexTest extends TestCase
      */
     public function testIndexOk()
     {
-        $response = $this->json('GET', 'api/parties');
-
+        $response = $this->get('api/playlists');
         $response->assertStatus(200);
     }
 }
