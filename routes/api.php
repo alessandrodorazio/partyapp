@@ -14,3 +14,4 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::resource('/parties', 'PartyController');
+Route::resource('/playlists', 'PlaylistController');
