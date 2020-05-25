@@ -13,10 +13,13 @@ class PlaylistTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function PlaylistStoreOk()
     {
-        $response = $this->get('/');
-
+        $response = $this->json('POST', 'api/playlists', [
+            'name' => 'Creazione party con test',
+            'owner_id' => '15',
+            'gerne_id' => '2',
+        ]);
         $response->assertStatus(200);
     }
 }
