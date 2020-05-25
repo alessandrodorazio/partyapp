@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/parties', 'PartyController');
 Route::post('/playlists/{playlist_id}/songs/add', 'PlaylistController@addSongs')->name('playlist.add_songs');
 Route::resource('/playlists', 'PlaylistController');
+Route::resource('/moods', 'PartyMoodController');
