@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -13,32 +13,13 @@ import Radio from "@material-ui/core/Radio";
 import Checkbox from "@material-ui/core/Checkbox";
 import Slide from "@material-ui/core/Slide";
 import { APIs } from "../constants/requests";
-import { jsonToForm } from "../utilities/functions";
+import { fetchApi } from "../utilities/functions";
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 //array creati per simulare risposte dalle api
-const moods = [
-    {
-        value: "0",
-        label: "Scegli un mood"
-    },
-    {
-        value: "1",
-        label: "70s"
-    },
-    {
-        value: "2",
-        label: "Raggaeton"
-    },
-    {
-        value: "3",
-        label: "Random"
-    }
-];
-
 const playlists = [
     {
         value: "0",
@@ -71,14 +52,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const DialogForm = ({ open, setOpen }) => {
+const DialogForm = ({ open, setOpen, moods }) => {
     const classes = useStyles();
 
-    const [mood, setMood] = useState("0");
+    const [mood, setMood] = useState(0);
     const [radio, setRadio] = useState("1");
     const [playlist, setPlaylist] = useState("0");
     const [isPrivate, setIsPrivate] = useState(false);
     const [partyName, setPartyName] = useState("");
+    const [canCreate, setCanCreate] = useState(false);
+
+    useEffect(() => {
+        if (partyName.trim() !== "" && mood !== 0) {
+            setCanCreate(true);
+        } else {
+            setCanCreate(false);
+        }
+    }, [mood, partyName]);
 
     const handlePartyNameChange = (event) => {
         setPartyName(event.target.value);
@@ -105,23 +95,21 @@ const DialogForm = ({ open, setOpen }) => {
     };
 
     const submitParty = async () => {
-        const body = jsonToForm({
+        const body = {
             name: partyName,
             party_type: parseInt(radio, 10),
             private_party: isPrivate ? 1 : 0,
             owner_id: 1,
             mood_id: mood
-        });
-        const response = await fetch(APIs.partyAPIs, {
+        };
+
+        const response = await fetchApi({
+            url: APIs.parties,
             method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                "Content-Type": "multipart/form-data",
-                Accept: "*/*"
-            },
-            credentials: "same-origin",
+            csrf: csrfToken,
             body: body
         });
+
         console.log(response);
     };
 
@@ -157,9 +145,12 @@ const DialogForm = ({ open, setOpen }) => {
                         variant="outlined"
                         className={classes.selector}
                     >
+                        <MenuItem key={0} value={0}>
+                            Scegli un mood
+                        </MenuItem>
                         {moods.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.name}
                             </MenuItem>
                         ))}
                     </TextField>
@@ -203,7 +194,7 @@ const DialogForm = ({ open, setOpen }) => {
                 <Button onClick={handleClose} color="primary">
                     Annulla
                 </Button>
-                <Button color="primary" onClick={submitParty}>
+                <Button color="primary" disabled={!canCreate} onClick={submitParty}>
                     Crea
                 </Button>
             </DialogActions>

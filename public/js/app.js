@@ -40204,7 +40204,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, ".login-link {\n    color: white;\n    text-decoration: none;\n    margin: 0;\n    height: 100%;\n    width: 100%;\n}\n\n.party-panel-container {\n    margin-top: 20px;\n    width: 40%;\n    display: flex;\n    justify-content: center;\n    flex-direction: column;\n}\n\nbody {\n    background-color: #f5f5f5;\n}\n\n.create-party-container {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n}\n\n.create-party-container > :nth-child(2) {\n    margin-top: 10px;\n    margin-bottom: 10px;\n}\n\n.party-type {\n    margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, ".login-link {\r\n    color: white;\r\n    text-decoration: none;\r\n    margin: 0;\r\n    height: 100%;\r\n    width: 100%;\r\n}\r\n\r\n.party-panel-container {\r\n    margin-top: 20px;\r\n    width: 40%;\r\n    display: flex;\r\n    justify-content: center;\r\n    flex-direction: column;\r\n}\r\n\r\nbody {\r\n    background-color: #f5f5f5;\r\n}\r\n\r\n.create-party-container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n}\r\n\r\n.create-party-container > :nth-child(2) {\r\n    margin-top: 10px;\r\n    margin-bottom: 10px;\r\n}\r\n\r\n.party-type {\r\n    margin-top: 10px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -82628,19 +82628,6 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content; //array creati per simulare risposte dalle api
 
-var moods = [{
-  value: "0",
-  label: "Scegli un mood"
-}, {
-  value: "1",
-  label: "70s"
-}, {
-  value: "2",
-  label: "Raggaeton"
-}, {
-  value: "3",
-  label: "Random"
-}];
 var playlists = [{
   value: "0",
   label: "Genera una playlist"
@@ -82673,10 +82660,11 @@ var Transition = react__WEBPACK_IMPORTED_MODULE_1___default.a.forwardRef(functio
 
 var DialogForm = function DialogForm(_ref) {
   var open = _ref.open,
-      setOpen = _ref.setOpen;
+      setOpen = _ref.setOpen,
+      moods = _ref.moods;
   var classes = useStyles();
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])("0"),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(0),
       _useState2 = _slicedToArray(_useState, 2),
       mood = _useState2[0],
       setMood = _useState2[1];
@@ -82700,6 +82688,19 @@ var DialogForm = function DialogForm(_ref) {
       _useState10 = _slicedToArray(_useState9, 2),
       partyName = _useState10[0],
       setPartyName = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      canCreate = _useState12[0],
+      setCanCreate = _useState12[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    if (partyName.trim() !== "" && mood !== 0) {
+      setCanCreate(true);
+    } else {
+      setCanCreate(false);
+    }
+  }, [mood, partyName]);
 
   var handlePartyNameChange = function handlePartyNameChange(event) {
     setPartyName(event.target.value);
@@ -82732,22 +82733,18 @@ var DialogForm = function DialogForm(_ref) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              body = Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_16__["jsonToForm"])({
+              body = {
                 name: partyName,
                 party_type: parseInt(radio, 10),
                 private_party: isPrivate ? 1 : 0,
                 owner_id: 1,
                 mood_id: mood
-              });
+              };
               _context.next = 3;
-              return fetch(_constants_requests__WEBPACK_IMPORTED_MODULE_15__["APIs"].partyAPIs, {
+              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_16__["fetchApi"])({
+                url: _constants_requests__WEBPACK_IMPORTED_MODULE_15__["APIs"].parties,
                 method: "POST",
-                headers: {
-                  "X-CSRF-TOKEN": csrfToken,
-                  "Content-Type": "multipart/form-data",
-                  Accept: "*/*"
-                },
-                credentials: "same-origin",
+                csrf: csrfToken,
                 body: body
               });
 
@@ -82797,11 +82794,14 @@ var DialogForm = function DialogForm(_ref) {
     onChange: handleMoodChange,
     variant: "outlined",
     className: classes.selector
-  }, moods.map(function (option) {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    key: 0,
+    value: 0
+  }, "Scegli un mood"), moods.map(function (option) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      key: option.value,
-      value: option.value
-    }, option.label);
+      key: option.id,
+      value: option.id
+    }, option.name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_7__["default"], {
     id: "outlined-select-playlist",
     select: true,
@@ -82846,6 +82846,7 @@ var DialogForm = function DialogForm(_ref) {
     color: "primary"
   }, "Annulla"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_18__["default"], {
     color: "primary",
+    disabled: !canCreate,
     onClick: submitParty
   }, "Crea")));
 };
@@ -82891,6 +82892,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var types = [{
+  id: 1,
+  name: "Battle"
+}, {
+  id: 2,
+  name: "Democracy"
+}];
 var useStyles = Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["makeStyles"])(function (theme) {
   return {
     heading: {
@@ -82905,7 +82913,8 @@ var useStyles = Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["makeStyle
   };
 });
 
-var PartyCard = function PartyCard() {
+var PartyCard = function PartyCard(_ref) {
+  var parties = _ref.parties;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
@@ -82917,38 +82926,26 @@ var PartyCard = function PartyCard() {
     return function (event, isExpanded) {
       setExpanded(isExpanded ? panel : false);
     };
-  }; //simula una risposta di una API, questi saranno passati tramite i props
+  };
 
-
-  var panels = [{
-    name: "test",
-    type: "Battle",
-    mood: "70s",
-    "private": true,
-    description: "questo è un party di prova, codice adesione: WIP"
-  }, {
-    name: "test2",
-    type: "Democracy",
-    mood: "Nightcore",
-    "private": true,
-    description: "questo è un party di prova, codice adesione: WIP"
-  }];
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, panels[0] ? panels.map(function (panel, index) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, parties[0] ? parties.map(function (party) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanel__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      key: index,
+      key: party.id,
       className: classes.panel,
-      expanded: expanded === index,
-      onChange: handlePanelChange(index)
+      expanded: expanded === party.id,
+      onChange: handlePanelChange(party.id)
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanelSummary__WEBPACK_IMPORTED_MODULE_3__["default"], {
       expandIcon: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_ExpandMore__WEBPACK_IMPORTED_MODULE_5___default.a, null),
       "aria-controls": "panel1bh-content",
       id: "panel1bh-header"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], {
       className: classes.heading
-    }, panel.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }, party.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], {
       className: classes.secondaryHeading
-    }, panel.type + " " + panel.mood)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanelDetails__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, panel.description)));
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Non ci sono party nel tuo profilo"));
+    }, types.find(function (type) {
+      return type.id === party.party_type;
+    }).name + " " + party.mood.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanelDetails__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link)));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Caricamento party"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (PartyCard);
@@ -82967,7 +82964,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "APIs", function() { return APIs; });
 var BASE_URL = "http://127.0.0.1:8000/api/";
 var APIs = Object.freeze({
-  partyAPIs: BASE_URL + "parties"
+  parties: BASE_URL + "parties",
+  moods: BASE_URL + "moods",
+  playlists: BASE_URL + "playlists"
 });
 
 /***/ }),
@@ -82976,24 +82975,82 @@ var APIs = Object.freeze({
 /*!*********************************************!*\
   !*** ./resources/js/utilities/functions.js ***!
   \*********************************************/
-/*! exports provided: jsonToForm */
+/*! exports provided: jsonToForm, fetchApi */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jsonToForm", function() { return jsonToForm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchApi", function() { return fetchApi; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 var jsonToForm = function jsonToForm(body) {
   var formBody = new FormData();
 
   if (body != undefined || body != null) {
     for (var key in body) {
-      console.log(key);
       formBody.append(key, body[key]);
     }
   }
 
   return formBody.entries().done ? 0 : formBody;
 };
+var fetchApi = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref) {
+    var url, csrf, body, method, request, response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            url = _ref.url, csrf = _ref.csrf, body = _ref.body, method = _ref.method;
+            request = {
+              method: method,
+              headers: {
+                "X-CSRF-TOKEN": csrf
+              }
+            };
+
+            if (body != undefined && Object.keys(body).length > 0 && (method !== "GET" || method != undefined)) {
+              request = _objectSpread(_objectSpread({}, request), {}, {
+                body: jsonToForm(body)
+              });
+            }
+
+            _context.next = 5;
+            return fetch(url, request);
+
+          case 5:
+            response = _context.sent;
+            _context.next = 8;
+            return response.json();
+
+          case 8:
+            return _context.abrupt("return", _context.sent);
+
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function fetchApi(_x) {
+    return _ref2.apply(this, arguments);
+  };
+}();
 
 /***/ }),
 
@@ -83027,12 +83084,28 @@ var Home = function Home() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
-/* harmony import */ var _components_partyCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/partyCard */ "./resources/js/components/partyCard.js");
-/* harmony import */ var _components_dialogForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/dialogForm */ "./resources/js/components/dialogForm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _components_partyCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/partyCard */ "./resources/js/components/partyCard.js");
+/* harmony import */ var _components_dialogForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/dialogForm */ "./resources/js/components/dialogForm.js");
+/* harmony import */ var _utilities_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utilities/functions */ "./resources/js/utilities/functions.js");
+/* harmony import */ var _constants_requests__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../constants/requests */ "./resources/js/constants/requests.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -83050,7 +83123,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["makeStyles"])(function (theme) {
+
+
+var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["makeStyles"])(function (theme) {
   return {
     root: {
       width: "100%",
@@ -83068,25 +83144,88 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["ma
 var Profile = function Profile() {
   var classes = useStyles();
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
       _useState2 = _slicedToArray(_useState, 2),
       open = _useState2[0],
       setOpen = _useState2[1];
 
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+    moods: [],
+    parties: []
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      state = _useState4[0],
+      setState = _useState4[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var moodRequest, moodResponse, partyRequest, partyResponse;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              moodRequest = {
+                url: _constants_requests__WEBPACK_IMPORTED_MODULE_7__["APIs"].moods,
+                method: "GET",
+                csrf: csrfToken
+              };
+              _context.next = 3;
+              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_6__["fetchApi"])(moodRequest);
+
+            case 3:
+              moodResponse = _context.sent;
+              //bisogna implementare una api per prendere le playlist dato un utente
+              // const playlistRequest = {
+              //     url: APIs.playlists,
+              //     method: "GET",
+              //     csrf: csrfToken
+              // };
+              // const playlistResponse = await fetchApi(playlistRequest);
+              // console.log(playlistResponse);
+              partyRequest = {
+                url: _constants_requests__WEBPACK_IMPORTED_MODULE_7__["APIs"].parties,
+                method: "GET",
+                csrf: csrfToken
+              };
+              _context.next = 7;
+              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_6__["fetchApi"])(partyRequest);
+
+            case 7:
+              partyResponse = _context.sent;
+              setState(function (prevState) {
+                return _objectSpread(_objectSpread({}, prevState), {}, {
+                  moods: moodResponse.party_moods,
+                  parties: partyResponse.parties
+                });
+              });
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  }, []);
+
   var handleClickOpen = function handleClickOpen() {
+    console.log(state);
     setOpen(true);
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "party-panel-container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_partyCard__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_partyCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    parties: state.parties
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
     variant: "outlined",
     className: classes.addPartyButton,
     onClick: handleClickOpen,
     color: "primary"
-  }, "Aggiungi un party")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_dialogForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, "Aggiungi un party")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_dialogForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
     open: open,
-    setOpen: setOpen
+    setOpen: setOpen,
+    moods: state.moods
   }));
 };
 
@@ -83112,8 +83251,8 @@ var Profile = function Profile() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/leonardo/partyapp/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/leonardo/partyapp/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\formi\Desktop\Università\Progetti\agile\partyapp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\formi\Desktop\Università\Progetti\agile\partyapp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
