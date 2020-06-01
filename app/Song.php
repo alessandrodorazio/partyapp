@@ -10,4 +10,9 @@ class Song extends Model
     protected $fillable = ["title"];
     protected $hidden = ["pivot"];
 
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class, 'song_authors', 'song_id', 'author_id');
+    }
+
 }

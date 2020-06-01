@@ -10,7 +10,7 @@ class Playlist extends Model
     //
     protected $table = "playlists";
     protected $fillable = ["name", "genre_id", "owner_id"];
-    protected $appends = ["owner_username", "genre"];
+    protected $appends = ["owner_username", "songsCount", "genre"];
 
     public function owner()
     {
@@ -30,6 +30,11 @@ class Playlist extends Model
     public function getOwnerUsernameAttribute()
     {
         return $this->owner()->first()->username;
+    }
+
+    public function getSongsCountAttribute()
+    {
+        return $this->songs()->count();
     }
 
     public function getGenreAttribute()
