@@ -6,6 +6,7 @@ use Tests\TestCase;
 
 class PartyIndexTest extends TestCase
 {
+
     /**
      * A basic feature test example.
      *

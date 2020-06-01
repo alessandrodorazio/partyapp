@@ -6,6 +6,7 @@ use Tests\TestCase;
 
 class PlaylistStoreTest extends TestCase
 {
+
     /**
      * A basic feature test example.
      *

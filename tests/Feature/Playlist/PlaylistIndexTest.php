@@ -11,6 +11,7 @@ class PlaylistIndexTest extends TestCase
      *
      * @return void
      */
+
     public function testIndexOk()
     {
         $response = $this->get('api/playlists');
