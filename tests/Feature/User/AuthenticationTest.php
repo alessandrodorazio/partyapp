@@ -27,9 +27,9 @@ class AuthenticationTest extends TestCase
                 'token_type',
                 'expires_in',
             ]);
+        } else {
+            $this->expectNotToPerformAssertions();
         }
-
-        $this->expectNotToPerformAssertions();
 
     }
 
