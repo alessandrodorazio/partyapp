@@ -23,7 +23,23 @@ export const fetchApi = async ({ url, csrf, body, method }) => {
 
     const response = await fetch(url, request);
 
+    const status = response.status;
+
     //controlla se va refreshato il token e in caso refresha (da implementare)
 
-    return await response.json();
+    let jsonResponse;
+
+    try {
+        jsonResponse = await response.json();
+    } catch {
+        return {
+            ok: false,
+            status: status
+        };
+    }
+    return {
+        ok: true,
+        status: status,
+        body: jsonResponse
+    };
 };

@@ -6,8 +6,14 @@
     width: 100%;
 }
 
-.party-panel-container {
+.profile-container {
     margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.party-panel-container {
     width: 40%;
     display: flex;
     justify-content: center;
@@ -31,4 +37,10 @@ body {
 
 .party-type {
     margin-top: 10px;
+}
+
+.playlist-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
 }

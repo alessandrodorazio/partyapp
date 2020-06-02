@@ -52,7 +52,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const DialogForm = ({ open, setOpen, moods }) => {
+const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
     const classes = useStyles();
 
     const [mood, setMood] = useState(0);
@@ -110,7 +110,11 @@ const DialogForm = ({ open, setOpen, moods }) => {
             body: body
         });
 
-        console.log(response);
+        if (response.ok) {
+            console.log("ok");
+        } else {
+            alert("errore durante la creazione del party");
+        }
     };
 
     return (
