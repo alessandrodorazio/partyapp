@@ -39,14 +39,6 @@ const Profile = () => {
                 csrf: csrfToken
             };
             const moodResponse = await fetchApi(moodRequest);
-            //bisogna implementare una api per prendere le playlist dato un utente
-            // const playlistRequest = {
-            //     url: APIs.playlists,
-            //     method: "GET",
-            //     csrf: csrfToken
-            // };
-            // const playlistResponse = await fetchApi(playlistRequest);
-            // console.log(playlistResponse);
 
             const partyRequest = {
                 url: APIs.parties,

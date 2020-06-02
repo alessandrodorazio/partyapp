@@ -88039,14 +88039,6 @@ var Profile = function Profile() {
 
             case 3:
               moodResponse = _context.sent;
-              //bisogna implementare una api per prendere le playlist dato un utente
-              // const playlistRequest = {
-              //     url: APIs.playlists,
-              //     method: "GET",
-              //     csrf: csrfToken
-              // };
-              // const playlistResponse = await fetchApi(playlistRequest);
-              // console.log(playlistResponse);
               partyRequest = {
                 url: _constants_requests__WEBPACK_IMPORTED_MODULE_7__["APIs"].parties,
                 method: "GET",
