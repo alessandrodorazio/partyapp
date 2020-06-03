@@ -2,7 +2,8 @@ import React, { useState, Fragment, useEffect, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import PartyCard from "../components/partyCard";
-import DialogForm from "../components/dialogForm";
+import PartyDialogForm from "../components/partyDialogForm";
+import PlaylistDialogForm from "../components/playlistDialogForm";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
@@ -24,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
+    const [openParty, setOpenParty] = useState(false);
+    const [openPlaylist, setOpenPlaylist] = useState(false);
+    const [playlist, setPlaylist] = useState({});
     const [state, setState] = useState({
         moods: [],
         parties: [],
@@ -69,13 +72,9 @@ const Profile = () => {
         })();
     }, []);
 
-    const handleClickOpen = () => {
-        console.log(state);
-        setOpen(true);
-    };
-
-    const addPartyClick = () => {
-        console.log("ciao");
+    const handlePlaylistClick = (p) => {
+        setPlaylist(p);
+        setOpenPlaylist(true);
     };
 
     return (
@@ -86,38 +85,26 @@ const Profile = () => {
                     <Button
                         variant="outlined"
                         className={classes.addPartyButton}
-                        onClick={handleClickOpen}
+                        onClick={() => setOpenParty(true)}
                         color="primary"
                     >
                         Aggiungi un party
                     </Button>
                 </div>
                 <div className="playlist-panel-container">
-                    <PlaylistList playlists={state.playlists} />
+                    <PlaylistList playlists={state.playlists} changePlaylistClick={handlePlaylistClick} />
                     <Button
                         variant="outlined"
                         className={classes.addPartyButton}
-                        onClick={addPartyClick}
+                        onClick={() => setOpenPlaylist(true)}
                         color="primary"
                     >
                         Aggiungi una playlist
                     </Button>
                 </div>
             </div>
-            <DialogForm
-                open={open}
-                setOpen={setOpen}
-                moods={state.moods}
-                partyCreated={(party) => {
-                    setState((prevState) => {
-                        parties = prevState.parties.push(party);
-                        return {
-                            ...prevState,
-                            parties: parties
-                        };
-                    });
-                }}
-            />
+            <PartyDialogForm open={openParty} setOpen={setOpenParty} moods={state.moods} partyCreated={null} />
+            <PlaylistDialogForm open={openPlaylist} setOpen={setOpenPlaylist} playlist={playlist} />
         </Fragment>
     );
 };

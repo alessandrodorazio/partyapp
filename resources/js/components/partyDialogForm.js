@@ -22,10 +22,6 @@ const csrfToken = document.head.querySelector("[name~=csrf-token][content]").con
 //array creati per simulare risposte dalle api
 const playlists = [
     {
-        value: "0",
-        label: "Genera una playlist"
-    },
-    {
         value: "1",
         label: "Only despacito"
     },
@@ -52,12 +48,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
+const PartyDialogForm = ({ open, setOpen, moods, partyCreated }) => {
     const classes = useStyles();
 
-    const [mood, setMood] = useState(0);
+    const [mood, setMood] = useState(-1);
     const [radio, setRadio] = useState("1");
-    const [playlist, setPlaylist] = useState("0");
+    const [playlist, setPlaylist] = useState(-1);
     const [isPrivate, setIsPrivate] = useState(false);
     const [partyName, setPartyName] = useState("");
     const [canCreate, setCanCreate] = useState(false);
@@ -86,10 +82,6 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
         setRadio(event.target.value);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     const handlePrivateChange = (event) => {
         setIsPrivate(event.target.checked);
     };
@@ -111,10 +103,12 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
         });
 
         if (response.ok) {
-            console.log("ok");
+            alert("il party è stato creato");
         } else {
             alert("errore durante la creazione del party");
         }
+
+        setOpen(false);
     };
 
     return (
@@ -122,7 +116,7 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
             open={open}
             TransitionComponent={Transition}
             keepMounted
-            onClose={handleClose}
+            onClose={() => setOpen(false)}
             aria-labelledby="alert-dialog-slide-title"
             aria-describedby="alert-dialog-slide-description"
             className={classes.createParty}
@@ -149,7 +143,7 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
                         variant="outlined"
                         className={classes.selector}
                     >
-                        <MenuItem key={0} value={0}>
+                        <MenuItem key={-1} value={-1}>
                             Scegli un mood
                         </MenuItem>
                         {moods.map((option) => (
@@ -167,6 +161,9 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
                         variant="outlined"
                         className={classes.selector}
                     >
+                        <MenuItem key={-1} value={-1}>
+                            Scegli una playlist
+                        </MenuItem>
                         {playlists.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}
@@ -195,7 +192,7 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
                 <DialogContentText id="alert-dialog-slide-description"></DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={() => setOpen(false)} color="primary">
                     Annulla
                 </Button>
                 <Button color="primary" disabled={!canCreate} onClick={submitParty}>
@@ -206,4 +203,4 @@ const DialogForm = ({ open, setOpen, moods, partyCreated }) => {
     );
 };
 
-export default DialogForm;
+export default PartyDialogForm;

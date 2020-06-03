@@ -32,7 +32,7 @@ function generate(element) {
     );
 }
 
-const PlaylistList = ({ playlists }) => {
+const PlaylistList = ({ playlists, changePlaylistClick }) => {
     const classes = useStyles();
 
     const [dense, setDense] = useState(false);
@@ -44,11 +44,7 @@ const PlaylistList = ({ playlists }) => {
                 {playlists.map((playlist) => (
                     <ListItem key={playlist.id}>
                         <ListItemAvatar>
-                            <Avatar
-                                onClick={() => {
-                                    console.log("ciao");
-                                }}
-                            >
+                            <Avatar onClick={() => changePlaylistClick(playlist)}>
                                 <ReactSVG
                                     src={music}
                                     style={{
