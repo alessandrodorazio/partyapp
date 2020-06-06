@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "../views/Home";
@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
     const classes = useStyles();
 
+    const [openAuth, setOpenAuth] = useState(false);
+
     return (
         <Router>
             <div className={classes.root}>
@@ -38,16 +40,14 @@ function App(props) {
                         <Typography variant="h6" className={classes.title}>
                             Party App
                         </Typography>
-                        <Button color="inherit">
-                            <Link className="login-link" to="/profile">
-                                Login
-                            </Link>
+                        <Button color="inherit" onClick={() => setOpenAuth(true)}>
+                            <Typography>Login</Typography>
                         </Button>
                     </Toolbar>
                 </AppBar>
             </div>
             <Switch>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/" render={() => <Home openAuth={openAuth} setOpenAuth={setOpenAuth} />} />
                 <Route exact path="/profile" component={Profile} />
             </Switch>
         </Router>

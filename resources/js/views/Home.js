@@ -1,7 +1,12 @@
 import React from "react";
+import AuthForm from "../components/AuthForm";
 
-const Home = () => {
-    return <div>Home</div>;
+const Home = ({ openAuth, setOpenAuth }) => {
+    return (
+        <div>
+            <AuthForm open={openAuth} setOpen={setOpenAuth} />
+        </div>
+    );
 };
 
 export default Home;
