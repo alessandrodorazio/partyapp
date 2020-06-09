@@ -1,53 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "../views/Home";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import "../../app.css";
 import Profile from "../views/Profile";
+import { fetchApi } from "../utilities/functions";
+import { APIs } from "../constants/requests";
+import Appbar from "../components/Appbar";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexGrow: 1
-    }
-}));
+const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 function App(props) {
-    const classes = useStyles();
+    const [firstRender, setFirstRender] = useState(true);
+    const [logged, setLogged] = useState(false);
+    const [openAuth, setOpenAuth] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            if (firstRender) {
+                setFirstRender(false);
+                const meRequest = {
+                    url: APIs.auth.me,
+                    method: "GET",
+                    csrf: csrfToken
+                };
+                const me = await fetchApi(meRequest);
+
+                if (Object.keys(me.body).length > 0) {
+                    setLogged(true);
+                }
+            }
+        })();
+    }, []);
 
     return (
         <Router>
-            <div className={classes.root}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            Party App
-                        </Typography>
-                        <Button color="inherit">
-                            <Link className="login-link" to="/profile">
-                                Login
-                            </Link>
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            </div>
+            <Appbar logged={logged} setLogged={setLogged} setOpenAuth={setOpenAuth} />
             <Switch>
-                <Route exact path="/" component={Home} />
+                <Route
+                    exact
+                    path="/"
+                    render={() => <Home openAuth={openAuth} setLogged={setLogged} setOpenAuth={setOpenAuth} />}
+                />
                 <Route exact path="/profile" component={Profile} />
             </Switch>
         </Router>

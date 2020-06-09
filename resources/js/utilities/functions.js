@@ -1,3 +1,6 @@
+import constants from "../constants/constants";
+import { APIs } from "../constants/requests";
+
 export const jsonToForm = (body) => {
     let formBody = new FormData();
 
@@ -14,18 +17,46 @@ export const fetchApi = async ({ url, csrf, body, method }) => {
     let request = {
         method: method,
         headers: {
-            "X-CSRF-TOKEN": csrf
+            "X-CSRF-TOKEN": csrf,
+            Authorization: "Bearer " + localStorage.getItem(constants.TOKEN)
         }
     };
     if (body != undefined && Object.keys(body).length > 0 && (method !== "GET" || method != undefined)) {
         request = { ...request, body: jsonToForm(body) };
     }
 
-    const response = await fetch(url, request);
+    let response = await fetch(url, request);
 
     const status = response.status;
 
-    //controlla se va refreshato il token e in caso refresha (da implementare)
+    let refresh;
+
+    let jsonRefresh;
+
+    if (status === 401) {
+        refresh = await fetch(APIs.auth.refresh, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrf,
+                Authorization: "Bearer " + localStorage.getItem(constants.TOKEN)
+            }
+        });
+
+        try {
+            jsonRefresh = await refresh.json();
+        } catch {
+            return {
+                ok: false,
+                status: 401,
+                body: {
+                    message: "impossibile aggiornare il token"
+                }
+            };
+        }
+        console.log(jsonRefresh.access_token);
+        localStorage.setItem(constants.TOKEN, jsonRefresh.access_token);
+        response = await fetch(url, request);
+    }
 
     let jsonResponse;
 
