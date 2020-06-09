@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -10,11 +10,20 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import TextField from "@material-ui/core/TextField";
+import { APIs } from "../constants/requests";
+import { fetchApi } from "../utilities/functions";
+import constants from "../constants/constants";
+
+const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
         width: 500
+    },
+    bigInput: {
+        width: "100%"
     }
 }));
 
@@ -47,10 +56,14 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired
 };
 
-const AuthForm = ({ open, setOpen }) => {
+const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
     const classes = useStyles();
     const theme = useTheme();
-    const [value, setValue] = React.useState(0);
+
+    const [value, setValue] = useState(0);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -62,6 +75,58 @@ const AuthForm = ({ open, setOpen }) => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const register = async () => {
+        const body = {
+            username: username,
+            email: email,
+            password: password
+        };
+
+        const response = await fetchApi({
+            url: APIs.auth.register,
+            method: "POST",
+            csrf: csrfToken,
+            body: body
+        });
+
+        if (response.ok) {
+            localStorage.setItem(constants.TOKEN, response.body.access_token);
+            alert("registrazione effettuata con successo");
+        } else {
+            alert("si è verificato un problema durante la registrazione");
+        }
+
+        handleClose();
+        setLogged(true);
+        toProfile();
+    };
+
+    const login = async () => {
+        const body = {
+            email: email,
+            password: password
+        };
+
+        const response = await fetchApi({
+            url: APIs.auth.login,
+            method: "POST",
+            csrf: csrfToken,
+            body: body
+        });
+
+        console.log(response);
+
+        if (response.ok) {
+            localStorage.setItem(constants.TOKEN, response.body.access_token);
+            setLogged(true);
+            toProfile();
+        } else {
+            alert("si è verificato un problema durante il login");
+        }
+
+        handleClose();
     };
 
     return (
@@ -82,8 +147,8 @@ const AuthForm = ({ open, setOpen }) => {
                             variant="fullWidth"
                             aria-label="full width tabs example"
                         >
-                            <Tab label="Item One" {...a11yProps(0)} />
-                            <Tab label="Item Two" {...a11yProps(1)} />
+                            <Tab label="Login" {...a11yProps(0)} />
+                            <Tab label="Registrati" {...a11yProps(1)} />
                         </Tabs>
                     </AppBar>
                     <SwipeableViews
@@ -92,10 +157,54 @@ const AuthForm = ({ open, setOpen }) => {
                         onChangeIndex={handleChangeIndex}
                     >
                         <TabPanel value={value} index={0} dir={theme.direction}>
-                            Login
+                            <div className="create-party-container">
+                                <TextField
+                                    id="outlined-basic"
+                                    label="email"
+                                    variant="outlined"
+                                    className={classes.bigInput}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <TextField
+                                    id="outlined-basic"
+                                    label="password"
+                                    variant="outlined"
+                                    type="password"
+                                    className={classes.bigInput}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction}>
-                            Registrati
+                            <div className="create-party-container">
+                                <TextField
+                                    id="outlined-basic"
+                                    label="username"
+                                    variant="outlined"
+                                    className={classes.bigInput}
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <TextField
+                                    id="outlined-basic"
+                                    label="email"
+                                    variant="outlined"
+                                    className={classes.bigInput}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <TextField
+                                    id="outlined-basic"
+                                    label="password"
+                                    variant="outlined"
+                                    type="password"
+                                    className={classes.bigInput}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
                         </TabPanel>
                     </SwipeableViews>
                 </div>
@@ -104,9 +213,15 @@ const AuthForm = ({ open, setOpen }) => {
                 <Button onClick={handleClose} color="primary">
                     Annulla
                 </Button>
-                <Button onClick={handleClose} color="primary" autoFocus>
-                    Login/registrati
-                </Button>
+                {value === 0 ? (
+                    <Button onClick={login} color="primary" autoFocus>
+                        Login
+                    </Button>
+                ) : (
+                    <Button onClick={register} color="primary" autoFocus>
+                        Registrati
+                    </Button>
+                )}
             </DialogActions>
         </Dialog>
     );
