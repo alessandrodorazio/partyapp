@@ -23,8 +23,17 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('users')->group(function () {
+    Route::resource('follows', 'FollowController')->only(['store', 'destroy']);
+    Route::get('follows/followers', 'FollowController@followers')->name('users.follows.followers');
+    Route::get('follows/following', 'FollowController@following')->name('users.follows.following');
+
+    Route::get('search/{value}', 'UserController@search')->name('users.search');
     Route::post('{user_id}/password/change', 'UserController@changePassword')->name('users.changepassword');
+
 });
+Route::resource('users', 'UserController')->except(['create', 'store']);
+
+Route::resource('genres', 'MusicalGenreController')->only(['index', 'store']);
 
 Route::prefix('parties')->group(function () {
     Route::get('myparties', 'PartyController@userParties')->name('party.myparties');
