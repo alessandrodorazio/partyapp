@@ -18,7 +18,7 @@ class UserController extends Controller
 
     //profilo utente
     public function show($user_id) {
-        $user = User::with('playlists')->with('parties')->find($user_id);
+        $user = User::with('playlists')->with('parties')->with('following')->with('followers')->find($user_id);
         if(! $user) {
             return (new Responser())->failed()->showMessage()->message('Utente non trovato')->statusCode(404)->response();
         }
