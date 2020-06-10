@@ -46,7 +46,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick }) => {
+const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setCreated }) => {
     const classes = useStyles();
 
     const [canCreate, setCanCreate] = useState(true);
@@ -54,6 +54,23 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick }) =>
     const [playlistName, setPlaylistName] = useState("");
 
     const submitPlaylist = async () => {
+        const body = {
+            genre_id: genre,
+            name: playlistName
+        };
+        const response = await fetchApi({
+            url: APIs.playlists.all,
+            method: "POST",
+            csrf: csrfToken,
+            body: body
+        });
+
+        if (response.ok) {
+            setCreated(true);
+        } else {
+            alert("errore durante la creazione dela playlist");
+        }
+
         setOpen(false);
     };
 

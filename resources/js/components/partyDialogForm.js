@@ -48,7 +48,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const PartyDialogForm = ({ open, setOpen, moods, partyCreated }) => {
+const PartyDialogForm = ({ open, setOpen, moods, setCreated }) => {
     const classes = useStyles();
 
     const [mood, setMood] = useState(-1);
@@ -91,19 +91,18 @@ const PartyDialogForm = ({ open, setOpen, moods, partyCreated }) => {
             name: partyName,
             party_type: parseInt(radio, 10),
             private_party: isPrivate ? 1 : 0,
-            owner_id: 1,
             mood_id: mood
         };
 
         const response = await fetchApi({
-            url: APIs.parties,
+            url: APIs.parties.all,
             method: "POST",
             csrf: csrfToken,
             body: body
         });
 
         if (response.ok) {
-            alert("il party è stato creato");
+            setCreated(true);
         } else {
             alert("errore durante la creazione del party");
         }

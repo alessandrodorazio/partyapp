@@ -93,14 +93,14 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
 
         if (response.ok) {
             localStorage.setItem(constants.TOKEN, response.body.access_token);
+            setLogged(true);
+            toProfile();
             alert("registrazione effettuata con successo");
         } else {
             alert("si è verificato un problema durante la registrazione");
         }
 
         handleClose();
-        setLogged(true);
-        toProfile();
     };
 
     const login = async () => {
@@ -115,8 +115,6 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
             csrf: csrfToken,
             body: body
         });
-
-        console.log(response);
 
         if (response.ok) {
             localStorage.setItem(constants.TOKEN, response.body.access_token);
