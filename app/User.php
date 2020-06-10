@@ -52,4 +52,12 @@ class User extends Authenticatable implements JWTSubject
             $this->attributes['password'] = bcrypt($password);
         }
     }
+
+    public function playlists() {
+        return $this->hasMany(Playlist::class, 'owner_id');
+    }
+
+    public function parties() {
+        return $this->hasMany(Party::class, 'owner_id');
+    }
 }
