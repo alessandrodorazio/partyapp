@@ -1,9 +1,15 @@
 const BASE_URL = "http://127.0.0.1:8000/api/";
 
-export const APIs = Object.freeze({
-    parties: BASE_URL + "parties",
+export const APIs = {
+    parties: {
+        all: BASE_URL + "parties",
+        my: BASE_URL + "parties/myparties"
+    },
     moods: BASE_URL + "moods",
-    playlists: BASE_URL + "playlists",
+    playlists: {
+        all: BASE_URL + "playlists",
+        my: BASE_URL + "playlists/myplaylists"
+    },
     auth: {
         register: BASE_URL + "auth/register",
         login: BASE_URL + "auth/login",
@@ -11,4 +17,4 @@ export const APIs = Object.freeze({
         refresh: BASE_URL + "auth/refresh",
         me: BASE_URL + "auth/me"
     }
-});
+};

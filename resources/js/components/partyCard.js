@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const PartyCard = ({ parties }) => {
+const PartyCard = ({ parties, found }) => {
     const classes = useStyles();
 
     const [expanded, setExpanded] = useState(false);
@@ -40,33 +40,37 @@ const PartyCard = ({ parties }) => {
 
     return (
         <Fragment>
-            {parties[0] ? (
-                parties.map((party) => (
-                    <ExpansionPanel
-                        key={party.id}
-                        className={classes.panel}
-                        expanded={expanded === party.id}
-                        onChange={handlePanelChange(party.id)}
-                    >
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
+            {found ? (
+                parties[0] ? (
+                    parties.map((party) => (
+                        <ExpansionPanel
+                            key={party.id}
+                            className={classes.panel}
+                            expanded={expanded === party.id}
+                            onChange={handlePanelChange(party.id)}
                         >
-                            <Typography className={classes.heading}>{party.name}</Typography>
-                            <Typography className={classes.secondaryHeading}>
-                                {types.find((type) => type.id === party.party_type).name + " " + party.mood.name}
-                            </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography>
-                                {"Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link}
-                            </Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                ))
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                            >
+                                <Typography className={classes.heading}>{party.name}</Typography>
+                                <Typography className={classes.secondaryHeading}>
+                                    {types.find((type) => type.id === party.party_type).name + " " + party.mood.name}
+                                </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Typography>
+                                    {"Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link}
+                                </Typography>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    ))
+                ) : (
+                    <Typography>Caricamento party</Typography>
+                )
             ) : (
-                <Typography>Caricamento party</Typography>
+                <Typography>Non hai creato nessun party</Typography>
             )}
         </Fragment>
     );

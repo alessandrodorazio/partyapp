@@ -63,7 +63,7 @@ const Appbar = ({ logged, setLogged, setOpenAuth }) => {
                         </Fragment>
                     ) : (
                         <Button color="inherit" onClick={() => setOpenAuth(true)}>
-                            <Typography>Login</Typography>
+                            <Typography>Login/Registrati</Typography>
                         </Button>
                     )}
                 </Toolbar>

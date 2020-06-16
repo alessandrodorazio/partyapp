@@ -33,44 +33,89 @@ const Profile = () => {
         parties: [],
         playlists: []
     });
+    const [found, setFound] = useState({
+        parties: true,
+        playlists: true
+    });
+    const [partyCreated, setPartyCreated] = useState(false);
+    const [playlistCreated, setPlaylistCreated] = useState(false);
+    const [firstRender, setFirstRender] = useState(true);
 
     useEffect(() => {
-        (async () => {
-            const moodRequest = {
-                url: APIs.moods,
-                method: "GET",
-                csrf: csrfToken
-            };
-            const moodResponse = await fetchApi(moodRequest);
+        if (partyCreated || playlistCreated || firstRender) {
+            //vedi se puoi fare promise.race
+            (async () => {
+                const moodRequest = {
+                    url: APIs.moods,
+                    method: "GET",
+                    csrf: csrfToken
+                };
+                const moodResponse = await fetchApi(moodRequest);
 
-            const partyRequest = {
-                url: APIs.parties,
-                method: "GET",
-                csrf: csrfToken
-            };
-            const partyResponse = await fetchApi(partyRequest);
+                if (moodResponse.ok) {
+                    setState((prevState) => {
+                        return {
+                            ...prevState,
+                            moods: moodResponse.body.party_moods
+                        };
+                    });
+                }
 
-            const playlistRequest = {
-                url: APIs.playlists,
-                method: "GET",
-                csrf: csrfToken
-            };
-            const playlistResponse = await fetchApi(playlistRequest);
+                const partyRequest = {
+                    url: APIs.parties.my,
+                    method: "GET",
+                    csrf: csrfToken
+                };
+                const partyResponse = await fetchApi(partyRequest);
 
-            if (partyResponse.ok && moodResponse.ok && playlistResponse.ok) {
-                setState((prevState) => {
-                    return {
-                        ...prevState,
-                        moods: moodResponse.body.party_moods,
-                        parties: partyResponse.body.parties.data,
-                        playlists: playlistResponse.body.playlists.data
-                    };
-                });
-            } else {
-                alert("errore");
-            }
-        })();
-    }, []);
+                if (partyResponse.ok) {
+                    if (partyResponse.body.parties.data.length === 0) {
+                        setFound((prevState) => {
+                            return {
+                                ...prevState,
+                                parties: false
+                            };
+                        });
+                    } else {
+                        setState((prevState) => {
+                            return {
+                                ...prevState,
+                                parties: partyResponse.body.parties.data
+                            };
+                        });
+                    }
+                }
+                const playlistRequest = {
+                    url: APIs.playlists.my,
+                    method: "GET",
+                    csrf: csrfToken
+                };
+                const playlistResponse = await fetchApi(playlistRequest);
+
+                if (playlistResponse.ok) {
+                    console.log(playlistResponse.body.playlists);
+                    if (playlistResponse.body.playlists.data.length === 0) {
+                        setFound((prevState) => {
+                            return {
+                                ...prevState,
+                                playlists: false
+                            };
+                        });
+                    } else {
+                        setState((prevState) => {
+                            return {
+                                ...prevState,
+                                playlists: playlistResponse.body.playlists.data
+                            };
+                        });
+                    }
+                }
+                setPartyCreated(false);
+                setPlaylistCreated(false);
+            })();
+            setFirstRender(false);
+        }
+    }, [partyCreated, playlistCreated]);
 
     const handlePlaylistClick = (p) => {
         setPlaylist(p);
@@ -81,7 +126,7 @@ const Profile = () => {
         <Fragment>
             <div className="profile-container">
                 <div className="party-panel-container">
-                    <PartyCard parties={state.parties} />
+                    <PartyCard parties={state.parties} found={found.parties} />
                     <Button
                         variant="outlined"
                         className={classes.addPartyButton}
@@ -92,7 +137,11 @@ const Profile = () => {
                     </Button>
                 </div>
                 <div className="playlist-panel-container">
-                    <PlaylistList playlists={state.playlists} changePlaylistClick={handlePlaylistClick} />
+                    <PlaylistList
+                        playlists={state.playlists}
+                        changePlaylistClick={handlePlaylistClick}
+                        found={found.playlists}
+                    />
                     <Button
                         variant="outlined"
                         className={classes.addPartyButton}
@@ -103,8 +152,19 @@ const Profile = () => {
                     </Button>
                 </div>
             </div>
-            <PartyDialogForm open={openParty} setOpen={setOpenParty} moods={state.moods} partyCreated={null} />
-            <PlaylistDialogForm open={openPlaylist} setOpen={setOpenPlaylist} playlist={playlist} />
+            <PartyDialogForm
+                open={openParty}
+                setOpen={setOpenParty}
+                moods={state.moods}
+                playlists={state.playlists}
+                setCreated={setPartyCreated}
+            />
+            <PlaylistDialogForm
+                open={openPlaylist}
+                setOpen={setOpenPlaylist}
+                playlist={playlist}
+                setCreated={setPlaylistCreated}
+            />
         </Fragment>
     );
 };

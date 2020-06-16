@@ -89122,7 +89122,7 @@ var Appbar = function Appbar(_ref) {
     onClick: function onClick() {
       return setOpenAuth(true);
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Login")))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Login/Registrati")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Appbar);
@@ -89306,16 +89306,16 @@ var AuthForm = function AuthForm(_ref) {
 
               if (response.ok) {
                 localStorage.setItem(_constants_constants__WEBPACK_IMPORTED_MODULE_16__["default"].TOKEN, response.body.access_token);
+                setLogged(true);
+                toProfile();
                 alert("registrazione effettuata con successo");
               } else {
                 alert("si è verificato un problema durante la registrazione");
               }
 
               handleClose();
-              setLogged(true);
-              toProfile();
 
-            case 8:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -89349,7 +89349,6 @@ var AuthForm = function AuthForm(_ref) {
 
             case 3:
               response = _context2.sent;
-              console.log(response);
 
               if (response.ok) {
                 localStorage.setItem(_constants_constants__WEBPACK_IMPORTED_MODULE_16__["default"].TOKEN, response.body.access_token);
@@ -89361,7 +89360,7 @@ var AuthForm = function AuthForm(_ref) {
 
               handleClose();
 
-            case 7:
+            case 6:
             case "end":
               return _context2.stop();
           }
@@ -89535,7 +89534,8 @@ var useStyles = Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["makeStyle
 });
 
 var PartyCard = function PartyCard(_ref) {
-  var parties = _ref.parties;
+  var parties = _ref.parties,
+      found = _ref.found;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
@@ -89549,7 +89549,7 @@ var PartyCard = function PartyCard(_ref) {
     };
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, parties[0] ? parties.map(function (party) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, found ? parties[0] ? parties.map(function (party) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanel__WEBPACK_IMPORTED_MODULE_1__["default"], {
       key: party.id,
       className: classes.panel,
@@ -89566,7 +89566,7 @@ var PartyCard = function PartyCard(_ref) {
     }, types.find(function (type) {
       return type.id === party.party_type;
     }).name + " " + party.mood.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ExpansionPanelDetails__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link)));
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Caricamento party"));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Caricamento party") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4__["default"], null, "Non hai creato nessun party"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (PartyCard);
@@ -89641,18 +89641,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
-var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content; //array creati per simulare risposte dalle api
-
-var playlists = [{
-  value: "1",
-  label: "Only despacito"
-}, {
-  value: "2",
-  label: "Nightcore"
-}, {
-  value: "3",
-  label: "Random"
-}];
+var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 var useStyles = Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_17__["makeStyles"])(function (theme) {
   return {
     selector: {
@@ -89674,7 +89663,8 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
   var open = _ref.open,
       setOpen = _ref.setOpen,
       moods = _ref.moods,
-      partyCreated = _ref.partyCreated;
+      setCreated = _ref.setCreated,
+      playlists = _ref.playlists;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(-1),
@@ -89746,12 +89736,11 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
                 name: partyName,
                 party_type: parseInt(radio, 10),
                 private_party: isPrivate ? 1 : 0,
-                owner_id: 1,
                 mood_id: mood
               };
               _context.next = 3;
               return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_16__["fetchApi"])({
-                url: _constants_requests__WEBPACK_IMPORTED_MODULE_15__["APIs"].parties,
+                url: _constants_requests__WEBPACK_IMPORTED_MODULE_15__["APIs"].parties.all,
                 method: "POST",
                 csrf: csrfToken,
                 body: body
@@ -89761,7 +89750,7 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
               response = _context.sent;
 
               if (response.ok) {
-                alert("il party è stato creato");
+                setCreated(true);
               } else {
                 alert("errore durante la creazione del party");
               }
@@ -89833,9 +89822,9 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
     value: -1
   }, "Scegli una playlist"), playlists.map(function (option) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      key: option.value,
-      value: option.value
-    }, option.label);
+      key: option.id,
+      value: option.id
+    }, option.name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "party-type"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -89971,7 +89960,8 @@ var PlaylistDialogForm = function PlaylistDialogForm(_ref) {
   var open = _ref.open,
       setOpen = _ref.setOpen,
       playlist = _ref.playlist,
-      handlePlaylistClick = _ref.handlePlaylistClick;
+      handlePlaylistClick = _ref.handlePlaylistClick,
+      setCreated = _ref.setCreated;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(true),
@@ -89991,13 +89981,35 @@ var PlaylistDialogForm = function PlaylistDialogForm(_ref) {
 
   var submitPlaylist = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var body, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              body = {
+                genre_id: genre,
+                name: playlistName
+              };
+              _context.next = 3;
+              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_9__["fetchApi"])({
+                url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].playlists.all,
+                method: "POST",
+                csrf: csrfToken,
+                body: body
+              });
+
+            case 3:
+              response = _context.sent;
+
+              if (response.ok) {
+                setCreated(true);
+              } else {
+                alert("errore durante la creazione dela playlist");
+              }
+
               setOpen(false);
 
-            case 1:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -90097,6 +90109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/IconButton */ "./node_modules/@material-ui/core/esm/IconButton/index.js");
 /* harmony import */ var _assets_svg_music_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../assets/svg/music.svg */ "./resources/assets/svg/music.svg");
 /* harmony import */ var _assets_svg_music_svg__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_assets_svg_music_svg__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -90108,6 +90121,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -90146,7 +90160,8 @@ function generate(element) {
 
 var PlaylistList = function PlaylistList(_ref) {
   var playlists = _ref.playlists,
-      changePlaylistClick = _ref.changePlaylistClick;
+      changePlaylistClick = _ref.changePlaylistClick,
+      found = _ref.found;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
@@ -90161,7 +90176,7 @@ var PlaylistList = function PlaylistList(_ref) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: classes.demo
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, found ? playlists[0] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__["default"], {
     dense: dense
   }, playlists.map(function (playlist) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -90183,7 +90198,15 @@ var PlaylistList = function PlaylistList(_ref) {
       edge: "end",
       "aria-label": "delete"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Delete__WEBPACK_IMPORTED_MODULE_5___default.a, null))));
-  })));
+  })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_12__["Typography"], {
+    style: {
+      backgroundColor: "#f5f5f5"
+    }
+  }, "caricamento delle playlist") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_12__["Typography"], {
+    style: {
+      backgroundColor: "#f5f5f5"
+    }
+  }, "non hai creato playlist"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (PlaylistList);
@@ -90217,10 +90240,16 @@ var constants = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "APIs", function() { return APIs; });
 var BASE_URL = "http://127.0.0.1:8000/api/";
-var APIs = Object.freeze({
-  parties: BASE_URL + "parties",
+var APIs = {
+  parties: {
+    all: BASE_URL + "parties",
+    my: BASE_URL + "parties/myparties"
+  },
   moods: BASE_URL + "moods",
-  playlists: BASE_URL + "playlists",
+  playlists: {
+    all: BASE_URL + "playlists",
+    my: BASE_URL + "playlists/myplaylists"
+  },
   auth: {
     register: BASE_URL + "auth/register",
     login: BASE_URL + "auth/login",
@@ -90228,7 +90257,7 @@ var APIs = Object.freeze({
     refresh: BASE_URL + "auth/refresh",
     me: BASE_URL + "auth/me"
   }
-});
+};
 
 /***/ }),
 
@@ -90519,64 +90548,127 @@ var Profile = function Profile() {
       state = _useState8[0],
       setState = _useState8[1];
 
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+    parties: true,
+    playlists: true
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      found = _useState10[0],
+      setFound = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      partyCreated = _useState12[0],
+      setPartyCreated = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      playlistCreated = _useState14[0],
+      setPlaylistCreated = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(true),
+      _useState16 = _slicedToArray(_useState15, 2),
+      firstRender = _useState16[0],
+      setFirstRender = _useState16[1];
+
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
-    _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var moodRequest, moodResponse, partyRequest, partyResponse, playlistRequest, playlistResponse;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              moodRequest = {
-                url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].moods,
-                method: "GET",
-                csrf: csrfToken
-              };
-              _context.next = 3;
-              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(moodRequest);
+    if (partyCreated || playlistCreated || firstRender) {
+      //vedi se puoi fare promise.race
+      _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var moodRequest, moodResponse, partyRequest, partyResponse, playlistRequest, playlistResponse;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                moodRequest = {
+                  url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].moods,
+                  method: "GET",
+                  csrf: csrfToken
+                };
+                _context.next = 3;
+                return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(moodRequest);
 
-            case 3:
-              moodResponse = _context.sent;
-              partyRequest = {
-                url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].parties,
-                method: "GET",
-                csrf: csrfToken
-              };
-              _context.next = 7;
-              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(partyRequest);
+              case 3:
+                moodResponse = _context.sent;
 
-            case 7:
-              partyResponse = _context.sent;
-              playlistRequest = {
-                url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].playlists,
-                method: "GET",
-                csrf: csrfToken
-              };
-              _context.next = 11;
-              return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(playlistRequest);
-
-            case 11:
-              playlistResponse = _context.sent;
-
-              if (partyResponse.ok && moodResponse.ok && playlistResponse.ok) {
-                setState(function (prevState) {
-                  return _objectSpread(_objectSpread({}, prevState), {}, {
-                    moods: moodResponse.body.party_moods,
-                    parties: partyResponse.body.parties.data,
-                    playlists: playlistResponse.body.playlists.data
+                if (moodResponse.ok) {
+                  setState(function (prevState) {
+                    return _objectSpread(_objectSpread({}, prevState), {}, {
+                      moods: moodResponse.body.party_moods
+                    });
                   });
-                });
-              } else {
-                alert("errore");
-              }
+                }
 
-            case 13:
-            case "end":
-              return _context.stop();
+                partyRequest = {
+                  url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].parties.my,
+                  method: "GET",
+                  csrf: csrfToken
+                };
+                _context.next = 8;
+                return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(partyRequest);
+
+              case 8:
+                partyResponse = _context.sent;
+
+                if (partyResponse.ok) {
+                  if (partyResponse.body.parties.data.length === 0) {
+                    setFound(function (prevState) {
+                      return _objectSpread(_objectSpread({}, prevState), {}, {
+                        parties: false
+                      });
+                    });
+                  } else {
+                    setState(function (prevState) {
+                      return _objectSpread(_objectSpread({}, prevState), {}, {
+                        parties: partyResponse.body.parties.data
+                      });
+                    });
+                  }
+                }
+
+                playlistRequest = {
+                  url: _constants_requests__WEBPACK_IMPORTED_MODULE_8__["APIs"].playlists.my,
+                  method: "GET",
+                  csrf: csrfToken
+                };
+                _context.next = 13;
+                return Object(_utilities_functions__WEBPACK_IMPORTED_MODULE_7__["fetchApi"])(playlistRequest);
+
+              case 13:
+                playlistResponse = _context.sent;
+
+                if (playlistResponse.ok) {
+                  console.log(playlistResponse.body.playlists);
+
+                  if (playlistResponse.body.playlists.data.length === 0) {
+                    setFound(function (prevState) {
+                      return _objectSpread(_objectSpread({}, prevState), {}, {
+                        playlists: false
+                      });
+                    });
+                  } else {
+                    setState(function (prevState) {
+                      return _objectSpread(_objectSpread({}, prevState), {}, {
+                        playlists: playlistResponse.body.playlists.data
+                      });
+                    });
+                  }
+                }
+
+                setPartyCreated(false);
+                setPlaylistCreated(false);
+
+              case 17:
+              case "end":
+                return _context.stop();
+            }
           }
-        }
-      }, _callee);
-    }))();
-  }, []);
+        }, _callee);
+      }))();
+
+      setFirstRender(false);
+    }
+  }, [partyCreated, playlistCreated]);
 
   var handlePlaylistClick = function handlePlaylistClick(p) {
     setPlaylist(p);
@@ -90588,7 +90680,8 @@ var Profile = function Profile() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "party-panel-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_partyCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    parties: state.parties
+    parties: state.parties,
+    found: found.parties
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
     variant: "outlined",
     className: classes.addPartyButton,
@@ -90600,7 +90693,8 @@ var Profile = function Profile() {
     className: "playlist-panel-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_playlistList__WEBPACK_IMPORTED_MODULE_9__["default"], {
     playlists: state.playlists,
-    changePlaylistClick: handlePlaylistClick
+    changePlaylistClick: handlePlaylistClick,
+    found: found.playlists
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
     variant: "outlined",
     className: classes.addPartyButton,
@@ -90612,11 +90706,13 @@ var Profile = function Profile() {
     open: openParty,
     setOpen: setOpenParty,
     moods: state.moods,
-    partyCreated: null
+    playlists: state.playlists,
+    setCreated: setPartyCreated
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_playlistDialogForm__WEBPACK_IMPORTED_MODULE_6__["default"], {
     open: openPlaylist,
     setOpen: setOpenPlaylist,
-    playlist: playlist
+    playlist: playlist,
+    setCreated: setPlaylistCreated
   }));
 };
 
