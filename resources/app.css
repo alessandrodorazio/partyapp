@@ -14,10 +14,10 @@
 }
 
 .party-panel-container {
-    width: 40%;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    margin-bottom: 15px;
 }
 
 body {
@@ -42,5 +42,10 @@ body {
 .playlist-panel-container {
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 100%;
+}
+
+.party_playlist {
+    display: flex;
+    flex-direction: column;
 }

@@ -24,9 +24,10 @@ function App(props) {
                     method: "GET",
                     csrf: csrfToken
                 };
+
                 const me = await fetchApi(meRequest);
 
-                if (Object.keys(me.body).length > 0) {
+                if (me.ok && Object.keys(me.body).length > 0) {
                     setLogged(true);
                 }
             }

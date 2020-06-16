@@ -7,6 +7,7 @@ import PlaylistDialogForm from "../components/playlistDialogForm";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
+import FollowBox from "../components/FollowBox";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -125,32 +126,35 @@ const Profile = () => {
     return (
         <Fragment>
             <div className="profile-container">
-                <div className="party-panel-container">
-                    <PartyCard parties={state.parties} found={found.parties} />
-                    <Button
-                        variant="outlined"
-                        className={classes.addPartyButton}
-                        onClick={() => setOpenParty(true)}
-                        color="primary"
-                    >
-                        Aggiungi un party
-                    </Button>
+                <div className="party_playlist">
+                    <div className="party-panel-container">
+                        <PartyCard parties={state.parties} found={found.parties} />
+                        <Button
+                            variant="outlined"
+                            className={classes.addPartyButton}
+                            onClick={() => setOpenParty(true)}
+                            color="primary"
+                        >
+                            Aggiungi un party
+                        </Button>
+                    </div>
+                    <div className="playlist-panel-container">
+                        <PlaylistList
+                            playlists={state.playlists}
+                            changePlaylistClick={handlePlaylistClick}
+                            found={found.playlists}
+                        />
+                        <Button
+                            variant="outlined"
+                            className={classes.addPartyButton}
+                            onClick={() => setOpenPlaylist(true)}
+                            color="primary"
+                        >
+                            Aggiungi una playlist
+                        </Button>
+                    </div>
                 </div>
-                <div className="playlist-panel-container">
-                    <PlaylistList
-                        playlists={state.playlists}
-                        changePlaylistClick={handlePlaylistClick}
-                        found={found.playlists}
-                    />
-                    <Button
-                        variant="outlined"
-                        className={classes.addPartyButton}
-                        onClick={() => setOpenPlaylist(true)}
-                        color="primary"
-                    >
-                        Aggiungi una playlist
-                    </Button>
-                </div>
+                <FollowBox />
             </div>
             <PartyDialogForm
                 open={openParty}
