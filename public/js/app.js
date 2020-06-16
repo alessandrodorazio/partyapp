@@ -89641,18 +89641,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
-var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content; //array creati per simulare risposte dalle api
-
-var playlists = [{
-  value: "1",
-  label: "Only despacito"
-}, {
-  value: "2",
-  label: "Nightcore"
-}, {
-  value: "3",
-  label: "Random"
-}];
+var csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 var useStyles = Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_17__["makeStyles"])(function (theme) {
   return {
     selector: {
@@ -89674,7 +89663,8 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
   var open = _ref.open,
       setOpen = _ref.setOpen,
       moods = _ref.moods,
-      setCreated = _ref.setCreated;
+      setCreated = _ref.setCreated,
+      playlists = _ref.playlists;
   var classes = useStyles();
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(-1),
@@ -89832,9 +89822,9 @@ var PartyDialogForm = function PartyDialogForm(_ref) {
     value: -1
   }, "Scegli una playlist"), playlists.map(function (option) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      key: option.value,
-      value: option.value
-    }, option.label);
+      key: option.id,
+      value: option.id
+    }, option.name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "party-type"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -90582,7 +90572,8 @@ var Profile = function Profile() {
       setFirstRender = _useState16[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
-    if (partyCreated && playlistCreated || firstRender) {
+    if (partyCreated || playlistCreated || firstRender) {
+      //vedi se puoi fare promise.race
       _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var moodRequest, moodResponse, partyRequest, partyResponse, playlistRequest, playlistResponse;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -90647,7 +90638,7 @@ var Profile = function Profile() {
                 playlistResponse = _context.sent;
 
                 if (playlistResponse.ok) {
-                  console.log("ciao");
+                  console.log(playlistResponse.body.playlists);
 
                   if (playlistResponse.body.playlists.data.length === 0) {
                     setFound(function (prevState) {
@@ -90715,6 +90706,7 @@ var Profile = function Profile() {
     open: openParty,
     setOpen: setOpenParty,
     moods: state.moods,
+    playlists: state.playlists,
     setCreated: setPartyCreated
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_playlistDialogForm__WEBPACK_IMPORTED_MODULE_6__["default"], {
     open: openPlaylist,

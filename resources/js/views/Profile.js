@@ -42,7 +42,8 @@ const Profile = () => {
     const [firstRender, setFirstRender] = useState(true);
 
     useEffect(() => {
-        if ((partyCreated && playlistCreated) || firstRender) {
+        if (partyCreated || playlistCreated || firstRender) {
+            //vedi se puoi fare promise.race
             (async () => {
                 const moodRequest = {
                     url: APIs.moods,
@@ -92,7 +93,7 @@ const Profile = () => {
                 const playlistResponse = await fetchApi(playlistRequest);
 
                 if (playlistResponse.ok) {
-                    console.log("ciao");
+                    console.log(playlistResponse.body.playlists);
                     if (playlistResponse.body.playlists.data.length === 0) {
                         setFound((prevState) => {
                             return {
@@ -151,7 +152,13 @@ const Profile = () => {
                     </Button>
                 </div>
             </div>
-            <PartyDialogForm open={openParty} setOpen={setOpenParty} moods={state.moods} setCreated={setPartyCreated} />
+            <PartyDialogForm
+                open={openParty}
+                setOpen={setOpenParty}
+                moods={state.moods}
+                playlists={state.playlists}
+                setCreated={setPartyCreated}
+            />
             <PlaylistDialogForm
                 open={openPlaylist}
                 setOpen={setOpenPlaylist}

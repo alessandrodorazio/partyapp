@@ -19,22 +19,6 @@ import Button from "@material-ui/core/Button";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
-//array creati per simulare risposte dalle api
-const playlists = [
-    {
-        value: "1",
-        label: "Only despacito"
-    },
-    {
-        value: "2",
-        label: "Nightcore"
-    },
-    {
-        value: "3",
-        label: "Random"
-    }
-];
-
 const useStyles = makeStyles((theme) => ({
     selector: {
         width: 300
@@ -48,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const PartyDialogForm = ({ open, setOpen, moods, setCreated }) => {
+const PartyDialogForm = ({ open, setOpen, moods, setCreated, playlists }) => {
     const classes = useStyles();
 
     const [mood, setMood] = useState(-1);
@@ -164,8 +148,8 @@ const PartyDialogForm = ({ open, setOpen, moods, setCreated }) => {
                             Scegli una playlist
                         </MenuItem>
                         {playlists.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.name}
                             </MenuItem>
                         ))}
                     </TextField>
