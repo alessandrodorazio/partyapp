@@ -28,6 +28,16 @@ class Party extends Model
         return $this->mood()->first();
     }
 
+    public function playlists()
+    {
+        return $this->belongsTo(Playlist::class, 'playlist_id', 'id');
+    }
+
+    public function songs()
+    {
+        return $this->belongsToMany(Song::class, 'party_songs', 'party_id', 'song_id', 'id', 'id')->withPivot('startDate');
+    }
+
     public function participants()
     {
         return $this->belongsToMany(User::class, 'participants', 'party_id', 'user_id', 'id', 'id');

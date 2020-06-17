@@ -34,11 +34,6 @@
             @foreach($songs as $song)
                 <tr>
                     <td>{{ $song->title }} </td>
-                    <td>
-                        @foreach($song->authors as $author)
-                            {{ $author->name }}{{ $author->name != $song->authors->last()->name?',':''}}
-                        @endforeach
-                    </td>
                 </tr>
             @endforeach
         </tbody>

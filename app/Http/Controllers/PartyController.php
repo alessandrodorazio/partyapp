@@ -8,6 +8,7 @@ use App\PartyMood;
 use App\Playlist;
 use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,8 +30,9 @@ class PartyController extends Controller
     public function show($party_id)
     {
         $party = Party::findOrFail($party_id);
+        $songs = $party->songs()->get();
         $participants = $party->participants()->get(['user_id', 'username']);
-        return (new Responser())->success()->showMessage()->message('Informazioni sul party')->item('party', $party)->item('participants', $participants)->response();
+        return (new Responser())->success()->showMessage()->message('Informazioni sul party')->item('party', $party)->item('songs', $songs)->item('participants', $participants)->response();
     }
 
     public function create()
@@ -88,6 +90,31 @@ class PartyController extends Controller
         return (new Responser())->success()->showMessage()->message('Il tuo party è stato creato')->item('party', $party)->response();
     }
 
+    public function startParty($party_id)
+    {
+        //aggiunge le canzoni della playlist a "party_songs"
+        $party = Party::find($party_id);
+        $playlist = $party->playlist;
+        return $playlist;
+        $now = Carbon::now()->addHours(2);
+
+        $duration = "03:50";
+        $minutes = $duration[1];
+        $seconds = $duration[3] . $duration[4];
+
+        $now->addMinutes($minutes)->addSeconds($seconds);
+    }
+
+    public function updateQueue(Request $request)
+    {
+
+    }
+
+    public function getQueue($party_id)
+    {
+
+    }
+
     public function exportCopyright($party_id)
     {
         $party = Party::find($party_id);
@@ -95,7 +122,7 @@ class PartyController extends Controller
 
         //TODO sync playlist
         $playlist = Playlist::find(129);
-        $songs = $playlist->songs()->with('authors')->get();
+        $songs = $playlist->songs()->get();
         $pdf = PDF::loadView('party.export.copyright', ['user' => $user, 'party' => $party, 'playlist' => $playlist, 'songs' => $songs]);
         return $pdf->download('invoice.pdf');
     }

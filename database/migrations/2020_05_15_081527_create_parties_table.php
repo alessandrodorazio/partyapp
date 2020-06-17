@@ -20,9 +20,11 @@ class CreatePartiesTable extends Migration
             $table->tinyInteger('private_party')->default(0); // 0 = public, 1 = private
             $table->bigInteger('owner_id')->unsigned();
             $table->bigInteger('mood_id')->unsigned();
+            $table->bigInteger('playlist_id')->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('owner_id')->references('id')->on('users');
             $table->foreign('mood_id')->references('id')->on('party_moods');
+            $table->foreign('playlist_id')->references('id')->on('playlists');
         });
     }
 

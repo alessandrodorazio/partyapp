@@ -38,6 +38,8 @@ Route::resource('genres', 'MusicalGenreController')->only(['index', 'store']);
 Route::prefix('parties')->group(function () {
     Route::get('myparties', 'PartyController@userParties')->name('party.myparties');
     Route::get('{party_id}/export/copyright', 'PartyController@exportCopyright')->name('party.export.copyright');
+
+    Route::post('{party_id}/queue/update', 'PartyController@updateQueue')->name('party.queue.update');
 });
 Route::resource('parties', 'PartyController');
 
@@ -48,3 +50,5 @@ Route::prefix('playlists')->group(function () {
 
 Route::resource('playlists', 'PlaylistController');
 Route::resource('moods', 'PartyMoodController');
+
+Route::post('songs/youtube/search', 'YoutubeController@search');
