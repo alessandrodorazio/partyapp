@@ -53,7 +53,6 @@ export const fetchApi = async ({ url, csrf, body, method }) => {
                 }
             };
         }
-        console.log(jsonRefresh.access_token);
         localStorage.setItem(constants.TOKEN, jsonRefresh.access_token);
         response = await fetch(url, request);
     }

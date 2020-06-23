@@ -13,8 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import UserList from "./userList";
-import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
+import { APIs } from "../constants/requests";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -74,25 +74,21 @@ const FollowBox = () => {
     const handleChangeIndex = (index) => {
         setValue(index);
     };
-    useEffect(() => {
-        if (value === 0) {
+
+    const handleSearch = async () => {
+        const userRequest = {
+            url: APIs.users.search + search,
+            method: "GET",
+            csrf: csrfToken
+        };
+        const userResponse = await fetchApi(userRequest);
+        if (!userResponse.ok) {
+            alert(userResponse.status);
             return;
         }
-        (async () => {
-            const userRequest = {
-                url: value === 1 ? APIs.users.following : APIs.users.followers,
-                method: "GET",
-                csrf: csrfToken
-            };
-            const userResponse = await fetchApi(userRequest);
-            console.log(userResponse.body);
-            if (userResponse.ok) {
-                setUsers(userResponse.body.users);
-            } else {
-                alert(userResponse.status);
-            }
-        })();
-    }, [value]);
+        console.log(userResponse.body);
+        setUsers(userResponse.body.users);
+    };
 
     return (
         <div className={classes.root}>
@@ -117,9 +113,9 @@ const FollowBox = () => {
             >
                 <TabPanel value={value} index={0} dir={theme.direction}>
                     <form
-                        onSubmit={(e) => {
+                        onSubmit={async (e) => {
                             e.preventDefault();
-                            console.log("adsadas");
+                            await handleSearch();
                         }}
                     >
                         <TextField
@@ -138,16 +134,17 @@ const FollowBox = () => {
                                 )
                             }}
                         />
-                        <IconButton>
+                        <IconButton type="submit">
                             <SearchIcon />
                         </IconButton>
+                        <UserList value={value} searched={users} />
                     </form>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    <UserList users={users} />
+                    <UserList value={value} />
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
-                    <UserList users={users} />
+                    <UserList value={value} />
                 </TabPanel>
             </SwipeableViews>
         </div>

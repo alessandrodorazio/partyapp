@@ -19,6 +19,7 @@ export const APIs = {
     },
     users: {
         followers: BASE_URL + "users/follows/followers",
-        following: BASE_URL + "users/follows/following"
+        following: BASE_URL + "users/follows/following",
+        search: BASE_URL + "users/search/"
     }
 };
