@@ -124,7 +124,7 @@ const Profile = () => {
     };
 
     return (
-        <Fragment>
+        <div>
             <div className="profile-container">
                 <div className="party_playlist">
                     <div className="party-panel-container">
@@ -169,7 +169,7 @@ const Profile = () => {
                 playlist={playlist}
                 setCreated={setPlaylistCreated}
             />
-        </Fragment>
+        </div>
     );
 };
 

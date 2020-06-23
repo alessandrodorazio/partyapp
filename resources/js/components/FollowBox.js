@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -12,6 +12,11 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
+import UserList from "./userList";
+import { APIs } from "../constants/requests";
+import { fetchApi } from "../utilities/functions";
+
+const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -62,13 +67,33 @@ const FollowBox = () => {
     const [search, setSearch] = useState("");
     const theme = useTheme();
     const [value, setValue] = useState(0);
+    const [users, setUsers] = useState([]);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
     const handleChangeIndex = (index) => {
         setValue(index);
     };
+    useEffect(() => {
+        if (value === 0) {
+            return;
+        }
+        (async () => {
+            const userRequest = {
+                url: value === 1 ? APIs.users.following : APIs.users.followers,
+                method: "GET",
+                csrf: csrfToken
+            };
+            const userResponse = await fetchApi(userRequest);
+            console.log(userResponse.body);
+            if (userResponse.ok) {
+                setUsers(userResponse.body.users);
+            } else {
+                alert(userResponse.status);
+            }
+        })();
+    }, [value]);
+
     return (
         <div className={classes.root}>
             <AppBar position="static" color="default">
@@ -80,9 +105,9 @@ const FollowBox = () => {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label="Item One" {...a11yProps(0)} />
-                    <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} />
+                    <Tab label="Cerca utenti" {...a11yProps(0)} />
+                    <Tab label="Seguiti" {...a11yProps(1)} />
+                    <Tab label="Seguaci" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <SwipeableViews
@@ -107,7 +132,7 @@ const FollowBox = () => {
                             }}
                             InputProps={{
                                 startAdornment: (
-                                    <InputAdornment position="start">
+                                    <InputAdornment component={"div"} position="start">
                                         <AccountCircle />
                                     </InputAdornment>
                                 )
@@ -119,10 +144,10 @@ const FollowBox = () => {
                     </form>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    Item Two
+                    <UserList users={users} />
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
-                    Item Three
+                    <UserList users={users} />
                 </TabPanel>
             </SwipeableViews>
         </div>

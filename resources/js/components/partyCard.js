@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         flexBasis: "33.33%",
-        flexShrink: 0
+        flexShrink: 0,
+        maxWidth: 200,
+        overflow: "hidden",
+        textOverflow: "ellipsis"
     },
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
