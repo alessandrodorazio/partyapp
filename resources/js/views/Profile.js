@@ -8,6 +8,7 @@ import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
 import FollowBox from "../components/FollowBox";
+import PartyUsersList from "../components/PartyUsersList";
 
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -92,7 +93,6 @@ const Profile = () => {
                     csrf: csrfToken
                 };
                 const playlistResponse = await fetchApi(playlistRequest);
-
                 if (playlistResponse.ok) {
                     console.log(playlistResponse.body.playlists);
                     if (playlistResponse.body.playlists.data.length === 0) {

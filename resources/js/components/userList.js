@@ -25,8 +25,7 @@ const UserList = ({ value, searched }) => {
 
     useEffect(() => {
         setUsers([]);
-        if (value === 0 && searched[0]) {
-            console.log("ciao");
+        if (value === 0 && searched && searched[0]) {
             setUsers(searched);
             return;
         } else if (value === 0) {
