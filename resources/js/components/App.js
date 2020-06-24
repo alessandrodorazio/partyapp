@@ -7,8 +7,9 @@ import Profile from "../views/Profile";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import Appbar from "../components/Appbar";
+import Party from "../views/Party";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+localStorage.setItem("CSRF", document.head.querySelector("[name~=csrf-token][content]").content);
 
 function App(props) {
     const [firstRender, setFirstRender] = useState(true);
@@ -44,6 +45,7 @@ function App(props) {
                     render={() => <Home openAuth={openAuth} setLogged={setLogged} setOpenAuth={setOpenAuth} />}
                 />
                 <Route exact path="/profile" component={Profile} />
+                <Route path="/parties" component={Party} />
             </Switch>
         </Router>
     );

@@ -109,16 +109,21 @@ const PartyCard = ({ parties, found }) => {
                                 </Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <Typography>
-                                    {"Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link}
-                                </Typography>
-                                <PartyUsersList
-                                    users={
-                                        participants && participants[0]
-                                            ? participants.find((p) => p.partyId === party.id).users
-                                            : null
-                                    }
-                                />
+                                <div className="party-details">
+                                    <Typography>
+                                        {"Partecipanti: " +
+                                            party.countParticipants +
+                                            ", link di adesione: " +
+                                            party.link}
+                                    </Typography>
+                                    <PartyUsersList
+                                        users={
+                                            participants && participants[0]
+                                                ? participants.find((p) => p.partyId === party.id).users
+                                                : null
+                                        }
+                                    />
+                                </div>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     ))

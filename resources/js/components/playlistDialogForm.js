@@ -12,27 +12,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
-const genres = [
-    {
-        id: 0,
-        name: "metal"
-    },
-    {
-        id: 1,
-        name: "rave"
-    },
-    {
-        id: 2,
-        name: "cartoon"
-    },
-    {
-        id: 3,
-        name: "rave"
-    }
-];
-
 const useStyles = makeStyles((theme) => ({
     selector: {
         width: 300
@@ -52,6 +31,23 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
     const [canCreate, setCanCreate] = useState(true);
     const [genre, setGenre] = useState(-1);
     const [playlistName, setPlaylistName] = useState("");
+    const [genres, setGenres] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            const genreRequest = {
+                url: APIs.genres,
+                method: "GET"
+            };
+            const genreResponse = await fetchApi(genreRequest);
+
+            if (genreResponse.ok) {
+                setGenres(genreResponse.body.genres);
+            } else {
+                alert("niente generi");
+            }
+        })();
+    }, []);
 
     const submitPlaylist = async () => {
         const body = {
