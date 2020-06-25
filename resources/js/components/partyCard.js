@@ -1,10 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core";
+import { APIs } from "../constants/requests";
+import { fetchApi } from "../utilities/functions";
+import PartyUsersList from "./PartyUsersList";
 
 const types = [
     {
@@ -21,7 +24,10 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         flexBasis: "33.33%",
-        flexShrink: 0
+        flexShrink: 0,
+        maxWidth: 200,
+        overflow: "hidden",
+        textOverflow: "ellipsis"
     },
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
@@ -29,10 +35,50 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const participantsRequest = async (id) => {
+    const request = {
+        url: `${APIs.parties.all}/${id}`,
+        method: "GET"
+    };
+
+    const response = await fetchApi(request);
+
+    if (response.ok) {
+        return {
+            ok: true,
+            participants: response.body.participants
+        };
+    }
+    return {
+        ok: false
+    };
+};
+
 const PartyCard = ({ parties, found }) => {
     const classes = useStyles();
 
     const [expanded, setExpanded] = useState(false);
+    const [participants, setParticipants] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (parties && parties[0]) {
+                let newParticipants = [];
+                await parties.forEach(async (party) => {
+                    const response = await participantsRequest(party.id);
+                    newParticipants.push(
+                        response.ok
+                            ? {
+                                  partyId: party.id,
+                                  users: response.participants
+                              }
+                            : null
+                    );
+                });
+                setParticipants(newParticipants);
+            }
+        })();
+    }, [parties]);
 
     const handlePanelChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -60,9 +106,21 @@ const PartyCard = ({ parties, found }) => {
                                 </Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <Typography>
-                                    {"Partecipanti: " + party.countParticipants + ", link di adesione: " + party.link}
-                                </Typography>
+                                <div className="party-details">
+                                    <Typography>
+                                        {"Partecipanti: " +
+                                            party.countParticipants +
+                                            ", link di adesione: " +
+                                            party.link}
+                                    </Typography>
+                                    <PartyUsersList
+                                        users={
+                                            participants && participants[0]
+                                                ? participants.find((p) => p.partyId === party.id).users
+                                                : null
+                                        }
+                                    />
+                                </div>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     ))

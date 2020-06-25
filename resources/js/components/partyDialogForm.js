@@ -17,8 +17,6 @@ import { fetchApi } from "../utilities/functions";
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const useStyles = makeStyles((theme) => ({
     selector: {
         width: 300
@@ -81,7 +79,6 @@ const PartyDialogForm = ({ open, setOpen, moods, setCreated, playlists }) => {
         const response = await fetchApi({
             url: APIs.parties.all,
             method: "POST",
-            csrf: csrfToken,
             body: body
         });
 

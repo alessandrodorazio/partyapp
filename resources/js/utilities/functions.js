@@ -13,11 +13,11 @@ export const jsonToForm = (body) => {
     return formBody.entries().done ? 0 : formBody;
 };
 
-export const fetchApi = async ({ url, csrf, body, method }) => {
+export const fetchApi = async ({ url, body, method }) => {
     let request = {
         method: method,
         headers: {
-            "X-CSRF-TOKEN": csrf,
+            "X-CSRF-TOKEN": localStorage.getItem("CSRF"),
             Authorization: "Bearer " + localStorage.getItem(constants.TOKEN)
         }
     };
@@ -53,7 +53,6 @@ export const fetchApi = async ({ url, csrf, body, method }) => {
                 }
             };
         }
-        console.log(jsonRefresh.access_token);
         localStorage.setItem(constants.TOKEN, jsonRefresh.access_token);
         response = await fetch(url, request);
     }

@@ -16,5 +16,11 @@ export const APIs = {
         logout: BASE_URL + "auth/logout",
         refresh: BASE_URL + "auth/refresh",
         me: BASE_URL + "auth/me"
-    }
+    },
+    users: {
+        followers: BASE_URL + "users/follows/followers",
+        following: BASE_URL + "users/follows/following",
+        search: BASE_URL + "users/search/"
+    },
+    genres: BASE_URL + "genres"
 };

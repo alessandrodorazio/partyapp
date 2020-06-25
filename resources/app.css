@@ -14,10 +14,10 @@
 }
 
 .party-panel-container {
-    width: 40%;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    margin-bottom: 15px;
 }
 
 body {
@@ -42,5 +42,28 @@ body {
 .playlist-panel-container {
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 100%;
+}
+
+.party_playlist {
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    border-radius: 4px;
+    border: 1px solid #cfcfcf;
+}
+
+.party-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.party-details > :nth-child(2) {
+    padding-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
 }

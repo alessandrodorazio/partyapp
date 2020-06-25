@@ -7,8 +7,7 @@ import PlaylistDialogForm from "../components/playlistDialogForm";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
-
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+import FollowBox from "../components/FollowBox";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,8 +46,7 @@ const Profile = () => {
             (async () => {
                 const moodRequest = {
                     url: APIs.moods,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const moodResponse = await fetchApi(moodRequest);
 
@@ -63,8 +61,7 @@ const Profile = () => {
 
                 const partyRequest = {
                     url: APIs.parties.my,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const partyResponse = await fetchApi(partyRequest);
 
@@ -87,11 +84,9 @@ const Profile = () => {
                 }
                 const playlistRequest = {
                     url: APIs.playlists.my,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const playlistResponse = await fetchApi(playlistRequest);
-
                 if (playlistResponse.ok) {
                     console.log(playlistResponse.body.playlists);
                     if (playlistResponse.body.playlists.data.length === 0) {
@@ -123,34 +118,37 @@ const Profile = () => {
     };
 
     return (
-        <Fragment>
+        <div>
             <div className="profile-container">
-                <div className="party-panel-container">
-                    <PartyCard parties={state.parties} found={found.parties} />
-                    <Button
-                        variant="outlined"
-                        className={classes.addPartyButton}
-                        onClick={() => setOpenParty(true)}
-                        color="primary"
-                    >
-                        Aggiungi un party
-                    </Button>
+                <div className="party_playlist">
+                    <div className="party-panel-container">
+                        <PartyCard parties={state.parties} found={found.parties} />
+                        <Button
+                            variant="outlined"
+                            className={classes.addPartyButton}
+                            onClick={() => setOpenParty(true)}
+                            color="primary"
+                        >
+                            Aggiungi un party
+                        </Button>
+                    </div>
+                    <div className="playlist-panel-container">
+                        <PlaylistList
+                            playlists={state.playlists}
+                            changePlaylistClick={handlePlaylistClick}
+                            found={found.playlists}
+                        />
+                        <Button
+                            variant="outlined"
+                            className={classes.addPartyButton}
+                            onClick={() => setOpenPlaylist(true)}
+                            color="primary"
+                        >
+                            Aggiungi una playlist
+                        </Button>
+                    </div>
                 </div>
-                <div className="playlist-panel-container">
-                    <PlaylistList
-                        playlists={state.playlists}
-                        changePlaylistClick={handlePlaylistClick}
-                        found={found.playlists}
-                    />
-                    <Button
-                        variant="outlined"
-                        className={classes.addPartyButton}
-                        onClick={() => setOpenPlaylist(true)}
-                        color="primary"
-                    >
-                        Aggiungi una playlist
-                    </Button>
-                </div>
+                <FollowBox />
             </div>
             <PartyDialogForm
                 open={openParty}
@@ -165,7 +163,7 @@ const Profile = () => {
                 playlist={playlist}
                 setCreated={setPlaylistCreated}
             />
-        </Fragment>
+        </div>
     );
 };
 

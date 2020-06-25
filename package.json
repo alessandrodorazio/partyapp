@@ -28,6 +28,7 @@
         "@material-ui/icons": "^4.9.1",
         "react-router-dom": "^5.2.0",
         "react-svg": "^11.0.24",
-        "react-swipeable-views": "^0.13.9"
+        "react-swipeable-views": "^0.13.9",
+        "react-window": "^1.8.5"
     }
 }
