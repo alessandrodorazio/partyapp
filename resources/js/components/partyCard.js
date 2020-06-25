@@ -9,8 +9,6 @@ import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import PartyUsersList from "./PartyUsersList";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const types = [
     {
         id: 1,
@@ -40,8 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const participantsRequest = async (id) => {
     const request = {
         url: `${APIs.parties.all}/${id}`,
-        method: "GET",
-        csrf: csrfToken
+        method: "GET"
     };
 
     const response = await fetchApi(request);

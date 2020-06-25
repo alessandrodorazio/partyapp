@@ -9,8 +9,6 @@ import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
 import FollowBox from "../components/FollowBox";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
@@ -48,8 +46,7 @@ const Profile = () => {
             (async () => {
                 const moodRequest = {
                     url: APIs.moods,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const moodResponse = await fetchApi(moodRequest);
 
@@ -64,8 +61,7 @@ const Profile = () => {
 
                 const partyRequest = {
                     url: APIs.parties.my,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const partyResponse = await fetchApi(partyRequest);
 
@@ -88,8 +84,7 @@ const Profile = () => {
                 }
                 const playlistRequest = {
                     url: APIs.playlists.my,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
                 const playlistResponse = await fetchApi(playlistRequest);
                 if (playlistResponse.ok) {

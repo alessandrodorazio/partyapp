@@ -11,8 +11,6 @@ import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import constants from "../constants/constants";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1
@@ -32,8 +30,7 @@ const Appbar = ({ logged, setLogged, setOpenAuth }) => {
     const logout = async () => {
         const logoutRequest = {
             url: APIs.auth.logout,
-            method: "POST",
-            csrf: csrfToken
+            method: "POST"
         };
         const logout = await fetchApi(logoutRequest);
 

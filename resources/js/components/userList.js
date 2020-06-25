@@ -8,8 +8,6 @@ import Switch from "@material-ui/core/Switch";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
@@ -34,8 +32,7 @@ const UserList = ({ value, searched }) => {
         (async () => {
             const userRequest = {
                 url: value === 1 ? APIs.users.following : APIs.users.followers,
-                method: "GET",
-                csrf: csrfToken
+                method: "GET"
             };
             const userResponse = await fetchApi(userRequest);
             if (!userResponse.ok) {

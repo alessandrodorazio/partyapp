@@ -16,8 +16,6 @@ import UserList from "./userList";
 import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -78,8 +76,7 @@ const FollowBox = () => {
     const handleSearch = async () => {
         const userRequest = {
             url: APIs.users.search + search,
-            method: "GET",
-            csrf: csrfToken
+            method: "GET"
         };
         const userResponse = await fetchApi(userRequest);
         if (!userResponse.ok) {

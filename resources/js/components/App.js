@@ -22,8 +22,7 @@ function App(props) {
                 setFirstRender(false);
                 const meRequest = {
                     url: APIs.auth.me,
-                    method: "GET",
-                    csrf: csrfToken
+                    method: "GET"
                 };
 
                 const me = await fetchApi(meRequest);

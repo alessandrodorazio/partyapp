@@ -11,6 +11,8 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
     selector: {
@@ -32,6 +34,7 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
     const [genre, setGenre] = useState(-1);
     const [playlistName, setPlaylistName] = useState("");
     const [genres, setGenres] = useState([]);
+    const [songName, setSongName] = useState("");
 
     useEffect(() => {
         (async () => {
@@ -57,7 +60,6 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
         const response = await fetchApi({
             url: APIs.playlists.all,
             method: "POST",
-            csrf: csrfToken,
             body: body
         });
 
@@ -100,7 +102,7 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
                         onChange={(event) => setPlaylistName(event.target.value)}
                     />
                     <TextField
-                        id="outlined-select-mood"
+                        id="outlined-select-genre"
                         select
                         label="Genre"
                         value={genre}
@@ -117,6 +119,19 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
                             </MenuItem>
                         ))}
                     </TextField>
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                        <TextField
+                            id="outlined-basic-song"
+                            label="add song"
+                            variant="outlined"
+                            className={classes.bigInput}
+                            value={songName}
+                            onChange={(event) => setSongName(event.target.value)}
+                        />
+                        <IconButton>
+                            <PlaylistAddIcon />
+                        </IconButton>
+                    </div>
                 </div>
                 <DialogContentText id="alert-dialog-slide-description"></DialogContentText>
             </DialogContent>

@@ -15,8 +15,6 @@ import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import constants from "../constants/constants";
 
-const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
@@ -87,7 +85,6 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
         const response = await fetchApi({
             url: APIs.auth.register,
             method: "POST",
-            csrf: csrfToken,
             body: body
         });
 
@@ -112,7 +109,6 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
         const response = await fetchApi({
             url: APIs.auth.login,
             method: "POST",
-            csrf: csrfToken,
             body: body
         });
 
