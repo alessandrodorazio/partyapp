@@ -37,6 +37,12 @@ class DatabaseSeeder extends Seeder
         factory(App\Playlist::class, 250)->create();
         factory(App\Song::class, 500)->create();
 
+        $party = App\Party::find(10);
+        $playlist = DB::table('playlist_songs')->first();
+        $playlist = App\Playlist::find($playlist->id);
+        $party->playlist_id = $playlist->id;
+        $party->save();
+
         for ($i = 0; $i <= 1000; $i++) {
             DB::table('invite_user_to_party')->insert(['user_id' => random_int(1, 50), 'party_id' => random_int(1, 100)]);
             DB::table('participants')->insert(['user_id' => random_int(1, 50), 'party_id' => random_int(1, 100)]);

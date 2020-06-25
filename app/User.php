@@ -53,19 +53,44 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
-    public function playlists() {
+    public function playlists()
+    {
         return $this->hasMany(Playlist::class, 'owner_id');
     }
 
-    public function parties() {
+    public function parties()
+    {
         return $this->hasMany(Party::class, 'owner_id');
     }
 
-    public function followers() {
+    public function followers()
+    {
         return $this->belongsToMany(User::class, 'followers', 'following', 'follower');
     }
 
-    public function following() {
+    public function following()
+    {
         return $this->belongsToMany(User::class, 'followers', 'follower', 'following');
+    }
+
+    public function favoritesSongs()
+    {
+        return $this->belongsToMany(Song::class, 'user_id', 'song_id');
+    }
+
+    public function addFavoriteSong($song_id)
+    {
+        $this->favoritesSongs()->attach($song_id);
+        $song = Song::find($song_id);
+        $song->favorites++;
+        $song->save();
+    }
+
+    public function removeFavoriteSong($song_id)
+    {
+        $this->favoritesSongs()->detach($song_id);
+        $song = Song::find($song_id);
+        $song->favorites--;
+        $song->save();
     }
 }

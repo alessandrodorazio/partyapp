@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePartySongsTable extends Migration
+class CreateSongAuthorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreatePartySongsTable extends Migration
      */
     public function up()
     {
-        Schema::create('party_songs', function (Blueprint $table) {
+        Schema::create('song_authors', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('party_id')->unsigned();
             $table->bigInteger('song_id')->unsigned();
-            $table->dateTime('start')->nullable();
-            $table->integer('votes')->default(0); //numero di voti ottenuti in caso di battle
-            $table->integer('approved')->default(true); //false=consigliata, true=approvata/nella playlist
+            $table->bigInteger('author_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('party_id')->references('id')->on('parties');
             $table->foreign('song_id')->references('id')->on('songs');
+            $table->foreign('author_id')->references('id')->on('authors');
         });
+
     }
 
     /**
@@ -34,6 +32,6 @@ class CreatePartySongsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('party_queue');
+        Schema::dropIfExists('song_authors');
     }
 }

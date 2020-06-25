@@ -35,7 +35,7 @@ class Party extends Model
 
     public function songs()
     {
-        return $this->belongsToMany(Song::class, 'party_songs', 'party_id', 'song_id', 'id', 'id')->withPivot('startDate');
+        return $this->belongsToMany(Song::class, 'party_songs', 'party_id', 'song_id', 'id', 'id')->withPivot('start', 'votes');
     }
 
     public function participants()

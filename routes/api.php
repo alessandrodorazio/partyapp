@@ -39,7 +39,15 @@ Route::prefix('parties')->group(function () {
     Route::get('myparties', 'PartyController@userParties')->name('party.myparties');
     Route::get('{party_id}/export/copyright', 'PartyController@exportCopyright')->name('party.export.copyright');
 
+    Route::get('{party_id}/start', 'PartyController@startParty')->name('party.start');
+    Route::get('{party_id}/queue', 'PartyController@getQueue')->name('party.queue.get');
+    Route::get('{party_id}/addNextSong/{song_id?}', 'PartyController@addNextSong')->name('party.songs.next');
     Route::post('{party_id}/queue/update', 'PartyController@updateQueue')->name('party.queue.update');
+
+    //battle api
+    Route::get('{party_id}/battle/randomSongs', 'PartyController@randomSongsBattle')->name('party.battle.randomsongs');
+    Route::get('{party_id}/battle/{song_id}/vote', 'PartyController@addVoteSongBattle')->name('party.battle.vote.add');
+
 });
 Route::resource('parties', 'PartyController');
 
