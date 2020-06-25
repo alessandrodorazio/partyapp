@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { FixedSizeList } from "react-window";
+import Player from "../components/Player";
 
 const users = [
     {
@@ -62,12 +63,7 @@ const Party = () => {
                     </FixedSizeList>
                 </div>
             )}
-            <div style={{ width: 300, height: 100, backgroundColor: "white" }}>
-                questo è il player{" "}
-                <a target="_blank" href="https://github.com/akinozgen/react-youtube-mp3-player">
-                    https://github.com/akinozgen/react-youtube-mp3-player
-                </a>
-            </div>
+            <Player />
         </div>
     );
 };
