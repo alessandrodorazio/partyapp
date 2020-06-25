@@ -12,6 +12,13 @@ class PartyIndexTest extends TestCase
      *
      * @return void
      */
+    public function testBasicTest()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
     public function testIndexOk()
     {
         $response = $this->json('GET', 'api/parties');

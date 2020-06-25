@@ -11,6 +11,13 @@ class PartyQueue extends TestCase
      *
      * @return void
      */
+    public function testBasicTest()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
     public function testGetQueue()
     {
         $response = $this->get('/api/parties/10/queue');

@@ -11,7 +11,14 @@ class PartyStart extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testBasicTest()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
+    public function testPartyStart()
     {
         $response = $this->get('/api/parties/10/start');
 
