@@ -4,7 +4,7 @@ namespace App\Http;
 
 class Responser
 {
-    public $response;
+    public $response, $status;
 
     public function response()
     {
@@ -13,6 +13,10 @@ class Responser
         }
         if (!isset($this->response['success'])) {
             $this->response['success'] = false;
+        }
+
+        if($this->status) {
+            return response()->json($this->response, $this->status);
         }
 
         if ($this->response['success'] === false) {
@@ -54,6 +58,11 @@ class Responser
     public function item($item_name, $item)
     {
         $this->response[$item_name] = $item;
+        return $this;
+    }
+
+    public function statusCode($status) {
+        $this->status = $status;
         return $this;
     }
 }
