@@ -48,7 +48,8 @@ class PartyController extends Controller
     }
 
     public function create()
-    {}
+    {
+    }
 
     public function store(Request $request)
     {
@@ -131,7 +132,6 @@ class PartyController extends Controller
         $firstSong->pivot->save();
 
         return (new Responser())->success()->item('party', $party)->item('next_song', $firstSong)->response();
-
     }
 
     //seleziona canzoni per la battle
@@ -189,8 +189,9 @@ class PartyController extends Controller
             $song = Song::find($song_id);
             $nextSong = true;
         } else {
-            if ($party->type === 1) { //battle
+            if ($party->party_type === 1) { //battle
                 //selezioniamo la canzone passata tramite richiesta HTTP
+                $song = $party->songs()->wherePivot('start', null)->orderBy('party_songs.votes', 'desc')->first();
                 $party->songs()->syncWithoutDetaching($song_id);
                 $nextSong = true;
             } else { //democracy
@@ -199,7 +200,6 @@ class PartyController extends Controller
                 if ($song) {
                     $nextSong = true;
                 }
-
             }
         }
 
@@ -221,7 +221,6 @@ class PartyController extends Controller
         $song = $party->songs()->wherePivotNotNull('start')->orderBy('party_songs.start', 'desc')->first();
 
         return (new Responser())->success()->showMessage()->message('Prossima canzone')->item('song', $song)->response();
-
     }
 
     //ritorna la canzone attuale e la successiva, deve essere richiamata prima della fine della prossima canzone

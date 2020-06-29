@@ -13,14 +13,14 @@ class FollowController extends Controller
     public function following()
     {
         $user = User::find(Auth::id());
-        return (new Responser())->success()->showMessage()->message('Persone seguite da ' . $user->username)->item('following', $user->following()->paginate(10))->response();
+        return (new Responser())->success()->showMessage()->message('Persone seguite da ' . $user->username)->item('following', $user->following()->get())->response();
     }
 
     //lista persone che ci seguono
     public function followers()
     {
         $user = User::find(Auth::id());
-        return (new Responser())->success()->showMessage()->message('Persone che seguono ' . $user->username)->item('following', $user->followers()->paginate(10))->response();
+        return (new Responser())->success()->showMessage()->message('Persone che seguono ' . $user->username)->item('following', $user->followers()->get())->response();
     }
 
     //nuovo follow

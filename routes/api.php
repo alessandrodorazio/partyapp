@@ -29,7 +29,6 @@ Route::prefix('users')->group(function () {
 
     Route::get('search/{value}', 'UserController@search')->name('users.search');
     Route::post('{user_id}/password/change', 'UserController@changePassword')->name('users.changepassword');
-
 });
 Route::resource('users', 'UserController')->except(['create', 'store']);
 
@@ -40,26 +39,18 @@ Route::prefix('parties')->group(function () {
     Route::get('{party_id}/export/copyright', 'PartyController@exportCopyright')->name('party.export.copyright');
 
     Route::get('{party_id}/start', 'PartyController@startParty')->name('party.start');
-
     Route::get('{party_id}/queue', 'PartyController@getQueue')->name('party.queue.get');
     Route::get('{party_id}/addNextSong/{song_id?}', 'PartyController@addNextSong')->name('party.songs.next');
     Route::post('{party_id}/queue/update', 'PartyController@updateQueue')->name('party.queue.update');
 
-    //songs api
-    Route::get('{party_id}/songs/suggested', 'PartyController@suggestedSongs')->name('party.songs.suggested');
-    Route::get('{party_id}/songs/{song_id}/suggest', 'PartyController@suggestSong')->name('party.songs.suggest');
-    Route::get('{party_id}/songs/{song_id}/approve', 'PartyController@approveSong')->name('party.songs.approve');
-
     //battle api
     Route::get('{party_id}/battle/randomSongs', 'PartyController@randomSongsBattle')->name('party.battle.randomsongs');
     Route::get('{party_id}/battle/{song_id}/vote', 'PartyController@addVoteSongBattle')->name('party.battle.vote.add');
-
 });
 Route::resource('parties', 'PartyController');
 
 Route::prefix('playlists')->group(function () {
     Route::get('myplaylists', 'PlaylistController@userPlaylists')->name('playlist.myplaylists');
-    Route::post('random', 'PlaylistController@createRandomPlaylist')->name('playlist.random');
     Route::post('{playlist_id}/songs/add', 'PlaylistController@addSongs')->name('playlist.add_songs');
 });
 
