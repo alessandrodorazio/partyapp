@@ -5,16 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Responser;
 use App\Party;
 use App\PartyMood;
+use App\Playlist;
 use App\User;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PartyController extends Controller
 {
     //
     public function index()
     {
-        $parties = Party::where('private_party', 0)->get();
+        $parties = Party::where('private_party', 0)->paginate(10);
         return (new Responser())->success()->showMessage()->message('Lista dei party pubblici')->item('parties', $parties)->response();
+    }
+
+    public function userParties()
+    {
+        $parties = Party::where('owner_id', Auth::id())->paginate(10);
+        return (new Responser())->success()->showMessage()->message('Party dell\' utente')->item('parties', $parties)->response();
     }
 
     public function show($party_id)
@@ -33,7 +42,6 @@ class PartyController extends Controller
             'name' => 'required|max:255',
             'party_type' => 'required|integer|min:1|max:2',
             'private_party' => 'integer|min:0|max:1',
-            'owner_id' => 'required',
             'mood_id' => 'required',
         ]);
 
@@ -44,7 +52,11 @@ class PartyController extends Controller
         } else {
             $private_party = 0;
         }
-        $owner_id = $request->owner_id; //TODO AUTH => Auth::id()
+        if ($request->owner_id) {
+            $owner_id = $request->owner_id;
+        } else {
+            $owner_id = Auth::id();
+        }
         $mood_id = $request->mood_id;
 
         $party = new Party();
@@ -74,5 +86,17 @@ class PartyController extends Controller
 
         $party->save();
         return (new Responser())->success()->showMessage()->message('Il tuo party è stato creato')->item('party', $party)->response();
+    }
+
+    public function exportCopyright($party_id)
+    {
+        $party = Party::find($party_id);
+        $user = User::find($party->owner_id);
+
+        //TODO sync playlist
+        $playlist = Playlist::find(129);
+        $songs = $playlist->songs()->with('authors')->get();
+        $pdf = PDF::loadView('party.export.copyright', ['user' => $user, 'party' => $party, 'playlist' => $playlist, 'songs' => $songs]);
+        return $pdf->download('invoice.pdf');
     }
 }

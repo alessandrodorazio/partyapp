@@ -7,6 +7,7 @@ use Tests\TestCase;
 
 class PartyStoreTest extends TestCase
 {
+
     /**
      * A basic feature test example.
      *

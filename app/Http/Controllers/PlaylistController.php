@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Responser;
-use App\Song;
+use App\MusicalGenre;
 use App\Playlist;
 use App\User;
-use App\MusicalGenre;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlaylistController extends Controller
 {
     public function index()
     {
-        $playlists = Playlist::all();
-        return (new Responser())->success()->showMessage()->message('Lista delle playlist')->item('playlist', $playlists)->response();
+        $playlists = Playlist::whereIn('owner_id', [1, Auth::id()])->paginate(10);
+        return (new Responser())->success()->showMessage()->message('Lista delle playlist')->item('playlists', $playlists)->response();
+    }
+
+    public function userPlaylists()
+    {
+        $playlists = Playlist::where('owner_id', Auth::id())->paginate(10);
+        return (new Responser())->success()->showMessage()->message('Lista delle playlist')->item('playlists', $playlists)->response();
     }
 
     public function show($playlist_id)
     {
         $playlist = Playlist::findOrFail($playlist_id);
-        $songs = $playlist->playlist_song()->get(['song_id', 'title']);
+        $songs = $playlist->songs()->get(['song_id', 'title']);
         return (new Responser())->success()->showMessage()->message('Informazioni sulla playlist')->item('playlist', $playlist)->item('songs', $songs)->response();
     }
 
@@ -29,21 +34,24 @@ class PlaylistController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'owner_id' => 'required',
             'genre_id' => 'required',
         ]);
 
-
         $name = $request->name;
-        $owner_id = $request->owner_id; //TODO AUTH => Auth::id()
+        if ($request->owner_id) {
+            $owner_id = $request->owner_id;
+        } else {
+            $owner_id = Auth::id();
+        }
         $genre_id = $request->genre_id;
-        $songs = $request->songs;
+        if (isset($request->songs)) {
+            $songs = json_decode($request->songs);
+        } else {
+            $songs = [];
+        }
 
         $playlist = new Playlist();
-        $playlist->songs()->attach($songs);
         $playlist->name = $name;
-
-
 
         if (User::where('id', $owner_id)->exists()) {
             $playlist->owner_id = $owner_id;
@@ -58,13 +66,25 @@ class PlaylistController extends Controller
         }
 
         $playlist->save();
-        return (new Responser())->success()->showMessage()->message('la tua playlisty è stata creato')->item('playlist', $playlist)->response();
+
+        $playlist->songs()->attach($songs);
+
+        return (new Responser())->success()->showMessage()->message('La tua playlist è stata creata')->item('playlist', $playlist)->response();
     }
 
-    public function addSongs(Request $request, $id)
+    public function addSongs(Request $request, $playlist_id)
     {
-        $songs = $request->songs;
-        $playlist = Playlist::where('playlist_id', $id);
-        $playlist->songs()->attach($songs);
+        $playlist = Playlist::find($playlist_id);
+        if ($playlist->owner_id == Auth::id()) {
+            $songs = json_decode($request->songs);
+
+            $playlist->songs()->syncWithoutDetaching($songs);
+            $songs = $playlist->songs()->get(['song_id', 'title']);
+            return (new Responser())->success()->showMessage()->message('I brani sono stati aggiunti alla playlist')->item('playlist', $playlist)->item('songs', $songs)->response();
+
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
     }
 }
