@@ -57,7 +57,7 @@ class PartyStartTest extends TestCase
 
     public function testSuggestSongOk()
     {
-        $response = $this->get('/api/parties/104/songs/143/suggest');
+        $response = $this->get('/api/parties/10/songs/143/suggest');
 
         $response->assertStatus(200);
     }
