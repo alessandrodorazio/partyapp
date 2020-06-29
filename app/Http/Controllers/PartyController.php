@@ -33,6 +33,17 @@ class PartyController extends Controller
         $party = Party::findOrFail($party_id);
         $songs = $party->songs()->get();
         $participants = $party->participants()->get(['user_id', 'username']);
+
+        //aggiungere come partecipante se si tratta di un utente autenticato
+        if (Auth::check()) {
+            if ($party->participants()->where('user_id', Auth::id())->count() == 0) {
+                $party->participants()->syncWithoutDetaching(Auth::id());
+                $user = User::find(Auth::id());
+                $user->points += 25;
+                $user->save();
+            }
+        }
+
         return (new Responser())->success()->showMessage()->message('Informazioni sul party')->item('party', $party)->item('songs', $songs)->item('participants', $participants)->response();
     }
 
@@ -59,6 +70,9 @@ class PartyController extends Controller
             $owner_id = $request->owner_id;
         } else {
             $owner_id = Auth::id();
+            $user = User::find($owner_id);
+            $user->points += 75;
+            $user->save();
         }
         $mood_id = $request->mood_id;
 
@@ -85,6 +99,11 @@ class PartyController extends Controller
             $party->mood_id = $mood_id;
         } else {
             return (new Responser())->failed()->showMessage()->message('Seleziona il mood del party')->response();
+        }
+
+        if ($request->playlist_id) {
+            $playlist_id = $request->playlist_id;
+            $party->playlist_id = $playlist_id;
         }
 
         $party->save();
@@ -133,11 +152,21 @@ class PartyController extends Controller
         return $song;
     }
 
+    //consiglia una canzone
+    public function suggestSong($party_id, $song_id)
+    {
+        //TODO verificare che non sia già stata consigliata
+        $party = Party::find($party_id);
+        $party->songs()->syncWithoutDetaching($song_id);
+        $party->songs()->updateExistingPivot($song_id, ['approved' => 0]);
+        return (new Responser())->success()->showMessage()->message('Canzone consigliata')->response();
+    }
+
     //ritorna le canzoni consigliate per un party
     public function suggestedSongs($party_id)
     {
         $party = Party::find($party_id);
-        $songs = $party->songs->wherePivot('approved', false)->get();
+        $songs = $party->songs()->wherePivot('approved', 0)->get();
         return (new Responser())->success()->message('Canzoni in attesa di essere approvate')->showMessage()->item('songs', $songs)->response();
     }
 
@@ -145,7 +174,7 @@ class PartyController extends Controller
     public function approveSong($party_id, $song_id)
     {
         $party = Party::find($party_id);
-        $party->songs()->syncWithoutDetaching($song_id);
+        $party->songs()->updateExistingPivot($song_id, ['approved' => 1]);
         return (new Responser())->success()->showMessage()->message('Canzone inserita in coda')->response();
     }
 
@@ -154,17 +183,28 @@ class PartyController extends Controller
     {
         //TODO controllare se non c'è più nulla
         $party = Party::find($party_id);
+        $nextSong = false;
 
         if ($song_id) { //se è stata passata una canzone
             $song = Song::find($song_id);
+            $nextSong = true;
         } else {
             if ($party->type === 1) { //battle
                 //selezioniamo la canzone passata tramite richiesta HTTP
                 $party->songs()->syncWithoutDetaching($song_id);
+                $nextSong = true;
             } else { //democracy
                 //canzone più votata
                 $song = $party->songs()->wherePivot('start', null)->orderBy('favorites', 'desc')->first();
+                if ($song) {
+                    $nextSong = true;
+                }
+
             }
+        }
+
+        if ($nextSong == false) {
+            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
         }
 
         //la canzone deve partire appena dopo quella attuale
@@ -190,6 +230,9 @@ class PartyController extends Controller
         $party = Party::find($party_id);
         $previousSong = $party->songs()->wherePivot('start', '<', Carbon::now()->addHours(2))->first();
         $nextSong = $party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->first();
+        if ($party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->count() == 0) {
+            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
+        }
         return (new Responser())->success()->showMessage()->message('Coda del party')->item('previousSong', $previousSong)->item('nextSong', $nextSong)->response();
     }
 

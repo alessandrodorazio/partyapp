@@ -57,7 +57,7 @@ class PartyStoreTest extends TestCase
     public function testStoreWithoutOwner()
     {
         $response = $this->json('POST', 'api/parties', ['name' => 'Party creato testando', 'party_type' => 1, 'mood_id' => 3]);
-        $response->assertStatus(422);
+        $response->assertStatus(500);
     }
 
     public function testStoreWithoutMood()

@@ -16,7 +16,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password',
+        'username', 'email', 'password', 'points',
     ];
 
     /**
@@ -27,6 +27,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token', 'pivot',
     ];
+
+    protected $appends = ['title'];
 
     /**
      * The attributes that should be cast to native types.
@@ -92,5 +94,23 @@ class User extends Authenticatable implements JWTSubject
         $song = Song::find($song_id);
         $song->favorites--;
         $song->save();
+    }
+
+    public function getTitleAttribute()
+    {
+        $level = ($this->points / 100) + 1;
+        if ($level < 5) {
+            return "Principante";
+        }
+
+        if ($level < 10) {
+            return "Intermedio";
+        }
+
+        if ($level < 15) {
+            return "Esperto";
+        }
+
+        return "Leggenda";
     }
 }
