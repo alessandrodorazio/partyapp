@@ -59,6 +59,7 @@ Route::resource('parties', 'PartyController');
 
 Route::prefix('playlists')->group(function () {
     Route::get('myplaylists', 'PlaylistController@userPlaylists')->name('playlist.myplaylists');
+    Route::post('random', 'PlaylistController@createRandomPlaylist')->name('playlist.random');
     Route::post('{playlist_id}/songs/add', 'PlaylistController@addSongs')->name('playlist.add_songs');
 });
 

@@ -69,6 +69,10 @@ class PlaylistController extends Controller
 
         $playlist->songs()->attach($songs);
 
+        $user = User::find($owner_id);
+        $user->points += 50;
+        $user->save();
+
         return (new Responser())->success()->showMessage()->message('La tua playlist è stata creata')->item('playlist', $playlist)->response();
     }
 
@@ -85,6 +89,23 @@ class PlaylistController extends Controller
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+
+    }
+
+    public function createRandomPlaylist(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+        ]);
+        $user = User::find(Auth::id());
+        $songs = \App\Song::inRandomOrder()->limit(20)->pluck('id');
+        $playlist = new Playlist();
+        $playlist->name = $request->name;
+        $playlist->owner_id = $user->id;
+        $playlist->genre_id = random_int(1, MusicalGenre::count());
+        $playlist->save();
+        $playlist->songs()->attach($songs);
+        return (new Responser())->success()->showMessage()->message('Playlist random creata')->item('playlist', $playlist)->response();
 
     }
 }
