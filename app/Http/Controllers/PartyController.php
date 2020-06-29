@@ -87,6 +87,11 @@ class PartyController extends Controller
             return (new Responser())->failed()->showMessage()->message('Seleziona il mood del party')->response();
         }
 
+        if ($request->playlist_id) {
+            $playlist_id = $request->playlist_id;
+            $party->playlist_id = $playlist_id;
+        }
+
         $party->save();
         return (new Responser())->success()->showMessage()->message('Il tuo party è stato creato')->item('party', $party)->response();
     }
@@ -133,11 +138,21 @@ class PartyController extends Controller
         return $song;
     }
 
+    //consiglia una canzone
+    public function suggestSong($party_id, $song_id)
+    {
+        //TODO verificare che non sia già stata consigliata
+        $party = Party::find($party_id);
+        $party->songs()->syncWithoutDetaching($song_id);
+        $party->songs()->updateExistingPivot($song_id, ['approved' => 0]);
+        return (new Responser())->success()->showMessage()->message('Canzone consigliata')->response();
+    }
+
     //ritorna le canzoni consigliate per un party
     public function suggestedSongs($party_id)
     {
         $party = Party::find($party_id);
-        $songs = $party->songs->wherePivot('approved', false)->get();
+        $songs = $party->songs()->wherePivot('approved', 0)->get();
         return (new Responser())->success()->message('Canzoni in attesa di essere approvate')->showMessage()->item('songs', $songs)->response();
     }
 
@@ -145,7 +160,7 @@ class PartyController extends Controller
     public function approveSong($party_id, $song_id)
     {
         $party = Party::find($party_id);
-        $party->songs()->syncWithoutDetaching($song_id);
+        $party->songs()->updateExistingPivot($song_id, ['approved' => 1]);
         return (new Responser())->success()->showMessage()->message('Canzone inserita in coda')->response();
     }
 
