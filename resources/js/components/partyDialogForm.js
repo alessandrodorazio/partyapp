@@ -46,6 +46,7 @@ const PartyDialogForm = ({ open, setOpen, moods, setCreated, playlists }) => {
         } else {
             setCanCreate(false);
         }
+        playlists && playlists[0] ? console.log(playlists[0].id, playlist) : console.log("looool");
     }, [mood, partyName]);
 
     const handlePartyNameChange = (event) => {
@@ -73,7 +74,8 @@ const PartyDialogForm = ({ open, setOpen, moods, setCreated, playlists }) => {
             name: partyName,
             party_type: parseInt(radio, 10),
             private_party: isPrivate ? 1 : 0,
-            mood_id: mood
+            mood_id: mood,
+            playlist_id: playlist
         };
 
         const response = await fetchApi({

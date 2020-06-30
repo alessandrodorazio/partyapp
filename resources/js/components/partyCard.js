@@ -115,7 +115,7 @@ const PartyCard = ({ parties, found }) => {
                                     </Typography>
                                     <PartyUsersList
                                         users={
-                                            participants && participants[0]
+                                            participants && participants.length[0] && participants.find
                                                 ? participants.find((p) => p.partyId === party.id).users
                                                 : null
                                         }

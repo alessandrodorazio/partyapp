@@ -44,7 +44,7 @@ function App(props) {
                     render={() => <Home openAuth={openAuth} setLogged={setLogged} setOpenAuth={setOpenAuth} />}
                 />
                 <Route exact path="/profile" component={Profile} />
-                <Route path="/parties" component={Party} />
+                <Route exact path="/parties/:partyId" component={Party} />
             </Switch>
         </Router>
     );

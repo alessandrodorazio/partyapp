@@ -88,7 +88,6 @@ const Profile = () => {
                 };
                 const playlistResponse = await fetchApi(playlistRequest);
                 if (playlistResponse.ok) {
-                    console.log(playlistResponse.body.playlists);
                     if (playlistResponse.body.playlists.data.length === 0) {
                         setFound((prevState) => {
                             return {
