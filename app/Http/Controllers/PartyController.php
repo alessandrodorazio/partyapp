@@ -227,8 +227,8 @@ class PartyController extends Controller
     public function getQueue($party_id)
     {
         $party = Party::find($party_id);
-        $previousSong = $party->songs()->wherePivot('start', '<', Carbon::now()->addHours(2))->first();
-        $nextSong = $party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->first();
+        $previousSong = $party->songs()->wherePivot('start', '<', Carbon::now()->addHours(2))->orderBy('party_songs.start', 'desc')->first();
+        $nextSong = $party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->orderBy('party_songs.start', 'asc')->first();
         return (new Responser())->success()->showMessage()->message('Coda del party')->item('previousSong', $previousSong)->item('nextSong', $nextSong)->response();
     }
 
