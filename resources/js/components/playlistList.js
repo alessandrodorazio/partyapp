@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ReactSVG } from "react-svg";
 import IconButton from "@material-ui/core/IconButton";
 import music from "../../assets/svg/music.svg";
-import { Typography } from "@material-ui/core";
+import { Typography, Card, CardHeader } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,28 +37,26 @@ const PlaylistList = ({ playlists, changePlaylistClick, found }) => {
                 playlists[0] ? (
                     <List dense={dense}>
                         {playlists.map((playlist) => (
-                            <ListItem key={playlist.id}>
-                                <ListItemAvatar>
-                                    <Avatar onClick={() => changePlaylistClick(playlist)}>
-                                        <ReactSVG
-                                            src={music}
-                                            style={{
-                                                width: 25,
-                                                height: 25
-                                            }}
-                                        />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={playlist.name + " / " + playlist.genre.name + " / " + playlist.songsCount}
-                                    secondary={secondary ? "Secondary text" : null}
+                            <Card className={classes.root} key={playlist.id}>
+                                <CardHeader
+                                    avatar={
+                                        <Avatar
+                                            aria-label="recipe"
+                                            onClick={() => changePlaylistClick(playlist)}
+                                            style={{ background: "#" + (((1 << 24) * Math.random()) | 0).toString(16) }}
+                                        >
+                                            {playlist.name[0]}
+                                        </Avatar>
+                                    }
+                                    action={
+                                        <IconButton aria-label="settings">
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    }
+                                    title={playlist.name}
+                                    subheader={playlist.genre.name + ", " + playlist.songsCount + " canzoni totali"}
                                 />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="delete">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                            </Card>
                         ))}
                     </List>
                 ) : (

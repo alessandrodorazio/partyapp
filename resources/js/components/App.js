@@ -8,6 +8,7 @@ import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import Appbar from "../components/Appbar";
 import Party from "../views/Party";
+import { createMuiTheme, Box } from "@material-ui/core";
 
 localStorage.setItem("CSRF", document.head.querySelector("[name~=csrf-token][content]").content);
 

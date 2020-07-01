@@ -14,14 +14,27 @@ import TextField from "@material-ui/core/TextField";
 import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import constants from "../constants/constants";
-
+import { InputAdornment, FormControl, InputLabel, Grid } from "@material-ui/core";
+import EmailIcon from "@material-ui/icons/Email";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import CancelIcon from "@material-ui/icons/Cancel";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import LockIcon from "@material-ui/icons/Lock";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import { red } from "@material-ui/core/colors";
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
         width: 500
     },
     bigInput: {
+        marginTop: "20px",
+        marginBottom: "20px",
         width: "100%"
+    },
+    dialogContent: {
+        paddingTop: 0,
+        background: red
     }
 }));
 
@@ -130,9 +143,9 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogContent>
+            <DialogContent style={{ borderRadius: "10px", paddingTop: 0, paddingLeft: 0, paddingRight: 0 }}>
                 <div className={classes.root}>
-                    <AppBar position="static" color="default">
+                    <AppBar position="static" color="default" style={{ borderRadius: "10px 10px 0 0" }}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
@@ -154,20 +167,40 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
                             <div className="create-party-container">
                                 <TextField
                                     id="outlined-basic"
-                                    label="email"
+                                    label="E-mail"
+                                    placeholder="La tua e-mail"
                                     variant="outlined"
-                                    className={classes.bigInput}
+                                    type={"email"}
                                     value={email}
+                                    className={classes.bigInput}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailIcon />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    fullWidth
                                 />
+
                                 <TextField
                                     id="outlined-basic"
-                                    label="password"
+                                    label="Password"
+                                    placeholder={"La tua password"}
                                     variant="outlined"
                                     type="password"
-                                    className={classes.bigInput}
                                     value={password}
+                                    className={classes.bigInput}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockIcon />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    fullWidth
                                 />
                             </div>
                         </TabPanel>
@@ -175,28 +208,55 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
                             <div className="create-party-container">
                                 <TextField
                                     id="outlined-basic"
-                                    label="username"
+                                    label="Username"
+                                    placeholder="Scegli il tuo nickname!"
                                     variant="outlined"
                                     className={classes.bigInput}
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <AssignmentIndIcon />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    fullWidth
                                 />
                                 <TextField
                                     id="outlined-basic"
-                                    label="email"
+                                    label="E-mail"
+                                    placeholder="Qual è la tua migliore email?"
                                     variant="outlined"
                                     className={classes.bigInput}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailIcon />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    fullWidth
                                 />
                                 <TextField
                                     id="outlined-basic"
-                                    label="password"
+                                    label="Password"
+                                    placeholder="scegli una password"
                                     variant="outlined"
                                     type="password"
                                     className={classes.bigInput}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockIcon />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    fullWidth
                                 />
                             </div>
                         </TabPanel>
@@ -204,18 +264,24 @@ const AuthForm = ({ open, setOpen, toProfile, setLogged }) => {
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Annulla
-                </Button>
-                {value === 0 ? (
-                    <Button onClick={login} color="primary" autoFocus>
-                        Login
-                    </Button>
-                ) : (
-                    <Button onClick={register} color="primary" autoFocus>
-                        Registrati
-                    </Button>
-                )}
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Button onClick={handleClose} color="primary">
+                            <CancelIcon />
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6} style={{ textAlign: "right" }}>
+                        {value === 0 ? (
+                            <Button onClick={login} color="primary" autoFocus>
+                                <VpnKeyIcon />
+                            </Button>
+                        ) : (
+                            <Button onClick={register} color="primary" autoFocus>
+                                <PersonAddIcon />
+                            </Button>
+                        )}
+                    </Grid>
+                </Grid>
             </DialogActions>
         </Dialog>
     );

@@ -8,6 +8,7 @@ import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
 import FollowBox from "../components/FollowBox";
+import { Paper, Box, Typography, Grid, Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -117,52 +118,70 @@ const Profile = () => {
     };
 
     return (
-        <div>
-            <div className="profile-container">
-                <div className="party_playlist">
-                    <div className="party-panel-container">
-                        <PartyCard parties={state.parties} found={found.parties} />
-                        <Button
-                            variant="outlined"
-                            className={classes.addPartyButton}
-                            onClick={() => setOpenParty(true)}
-                            color="primary"
-                        >
-                            Aggiungi un party
-                        </Button>
-                    </div>
-                    <div className="playlist-panel-container">
-                        <PlaylistList
+        <Box pt={3}>
+            <Container>
+                <Grid container spacing={5}>
+                    <Grid item md={4}>
+                        <Paper variant={"outlined"}>
+                            <Box p={3}>
+                                <Typography component={"h2"} variant={"h5"}>
+                                    I tuoi party
+                                </Typography>
+                                <div className="party-panel-container">
+                                    <PartyCard parties={state.parties} found={found.parties} />
+                                    <Button
+                                        variant="outlined"
+                                        className={classes.addPartyButton}
+                                        onClick={() => setOpenParty(true)}
+                                        color="primary"
+                                    >
+                                        Aggiungi un party
+                                    </Button>
+                                </div>
+                            </Box>
+                        </Paper>
+                        <Paper variant={"outlined"} style={{ marginTop: "10px" }}>
+                            <Box p={3}>
+                                <Typography component={"h2"} variant={"h5"}>
+                                    Le tue playlist
+                                </Typography>
+                                <div className="playlist-panel-container">
+                                    <PlaylistList
+                                        playlists={state.playlists}
+                                        changePlaylistClick={handlePlaylistClick}
+                                        found={found.playlists}
+                                    />
+                                    <Button
+                                        variant="outlined"
+                                        className={classes.addPartyButton}
+                                        onClick={() => setOpenPlaylist(true)}
+                                        color="primary"
+                                    >
+                                        Aggiungi una playlist
+                                    </Button>
+                                </div>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={8}>
+                        <FollowBox />
+                        <PartyDialogForm
+                            open={openParty}
+                            setOpen={setOpenParty}
+                            moods={state.moods}
                             playlists={state.playlists}
-                            changePlaylistClick={handlePlaylistClick}
-                            found={found.playlists}
+                            setCreated={setPartyCreated}
                         />
-                        <Button
-                            variant="outlined"
-                            className={classes.addPartyButton}
-                            onClick={() => setOpenPlaylist(true)}
-                            color="primary"
-                        >
-                            Aggiungi una playlist
-                        </Button>
-                    </div>
-                </div>
-                <FollowBox />
-            </div>
-            <PartyDialogForm
-                open={openParty}
-                setOpen={setOpenParty}
-                moods={state.moods}
-                playlists={state.playlists}
-                setCreated={setPartyCreated}
-            />
-            <PlaylistDialogForm
-                open={openPlaylist}
-                setOpen={setOpenPlaylist}
-                playlist={playlist}
-                setCreated={setPlaylistCreated}
-            />
-        </div>
+                        <PlaylistDialogForm
+                            open={openPlaylist}
+                            setOpen={setOpenPlaylist}
+                            playlist={playlist}
+                            setCreated={setPlaylistCreated}
+                        />
+                    </Grid>
+                </Grid>
+            </Container>
+        </Box>
     );
 };
 

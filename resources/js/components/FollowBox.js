@@ -54,9 +54,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1)
     },
     root: {
-        backgroundColor: theme.palette.background.paper,
-        width: 500,
-        height: 500
+        backgroundColor: theme.palette.background.paper
     }
 }));
 
@@ -118,10 +116,15 @@ const FollowBox = () => {
                         <TextField
                             className={classes.margin}
                             id="input-with-icon-textfield"
-                            label="cerca un utente"
+                            label="Ricerca"
+                            placeholder="Cerca un utente tramite username"
                             value={search}
                             onChange={(e) => {
                                 setSearch(e.target.value);
+                            }}
+                            fullWidth
+                            style={{
+                                maxWidth: "90%"
                             }}
                             InputProps={{
                                 startAdornment: (
