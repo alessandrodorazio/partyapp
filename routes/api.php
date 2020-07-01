@@ -58,3 +58,4 @@ Route::resource('playlists', 'PlaylistController');
 Route::resource('moods', 'PartyMoodController');
 
 Route::post('songs/youtube/search', 'YoutubeController@search');
+Route::resource('songs', 'SongController');
