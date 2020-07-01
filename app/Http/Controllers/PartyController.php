@@ -203,10 +203,6 @@ class PartyController extends Controller
             }
         }
 
-        if ($nextSong == false) {
-            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
-        }
-
         //la canzone deve partire appena dopo quella attuale
         $previousSong = $party->songs()->wherePivotNotNull('start')->orderBy('party_songs.start', 'desc')->first();
 
