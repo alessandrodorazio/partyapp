@@ -203,6 +203,10 @@ class PartyController extends Controller
             }
         }
 
+        if ($nextSong == false) {
+            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
+        }
+
         //la canzone deve partire appena dopo quella attuale
         $previousSong = $party->songs()->wherePivotNotNull('start')->orderBy('party_songs.start', 'desc')->first();
 
@@ -225,9 +229,6 @@ class PartyController extends Controller
         $party = Party::find($party_id);
         $previousSong = $party->songs()->wherePivot('start', '<', Carbon::now()->addHours(2))->first();
         $nextSong = $party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->first();
-        if ($party->songs()->wherePivot('start', '>=', Carbon::now()->addHours(2))->count() == 0) {
-            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
-        }
         return (new Responser())->success()->showMessage()->message('Coda del party')->item('previousSong', $previousSong)->item('nextSong', $nextSong)->response();
     }
 
