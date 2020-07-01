@@ -30,7 +30,7 @@ const Party = () => {
     const { partyId } = useParams();
     const [users, setUsers] = useState([]);
     const [playlist, setPlaylist] = useState({});
-    const [songs, setSongs] = useState([]);
+    const [queue, setQueue] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -42,17 +42,40 @@ const Party = () => {
             const participantsResponse = await fetchApi(participantsRequest);
 
             const playlistRequest = {
-                url: `${APIs.playlists.all}/${participantsResponse.body.party.playlist_id}`
+                url: `${APIs.playlists.all}/${participantsResponse.body.party.playlist_id}`,
+                method: "GET"
             };
 
             const playlistResponse = await fetchApi(playlistRequest);
 
+            const queueRequest = {
+                url: `${APIs.parties.all}/${partyId}/queue`,
+                method: "GET"
+            };
+
+            const queueResponse = await fetchApi(queueRequest);
+
+            if (queueResponse.ok) {
+                if (queueResponse.body.previousSong && queueResponse.nextSong) {
+                    setQueue([queueResponse.body.previousSong, queueResponse.body.nextSong]);
+                } else {
+                    setQueue([queueResponse.body.previousSong]);
+                }
+            }
+
             setPlaylist(playlistResponse.body.playlist);
-            setSongs(playlistResponse.body.songs);
 
             setUsers(participantsResponse.body.participants);
         })();
     }, [partyId]);
+
+    useEffect(() => {
+        const regexp = /[0-9]{2}:[0-9]{2}:[0-9]{2}/;
+        if (queue && queue[0]) {
+            let time = queue[0].pivot.start.match(regexp)[0];
+            console.log(time);
+        }
+    }, [queue]);
 
     useEffect(() => console.log(users.length * 46), [users]);
 
@@ -80,7 +103,7 @@ const Party = () => {
                     </FixedSizeList>
                 </div>
             )}
-            <Player />
+            <Player song={"prova"} />
         </div>
     );
 };

@@ -19,16 +19,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Player = () => {
+const Player = ({ song }) => {
     const classes = useStyles();
 
     const [state, setState] = useState(true);
     const [player, setPlayer] = useState(null);
     const [value, setValue] = useState(50);
 
+    let code = "https://www.youtube.com/watch?v=RZhGITHIbns".replace("https://www.youtube.com/watch?v=", "");
+
     const playPause = () => {
         if (player) {
-            if (state) {
+            if (!state) {
                 player.playVideo();
             } else {
                 player.pauseVideo();
@@ -64,7 +66,7 @@ const Player = () => {
                         }}
                     />
                 </div>
-                {state ? (
+                {!state ? (
                     <PlayCircleFilledIcon onClick={playPause} className={classes.button} />
                 ) : (
                     <PauseCircleFilledIcon onClick={playPause} className={classes.button} />

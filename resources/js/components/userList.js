@@ -44,7 +44,7 @@ const UserList = ({ value, searched }) => {
     }, [value, searched]);
 
     useEffect(() => {
-        if (value === 1 && users[0]) {
+        if (value === 1 && users && users[0]) {
             let check = [];
             users.forEach((u) => check.push(u.id));
             setChecked(check);
@@ -69,7 +69,8 @@ const UserList = ({ value, searched }) => {
 
     return (
         <List className={classes.root}>
-            {users[0] &&
+            {users &&
+                users[0] &&
                 users.map((u) => (
                     <ListItem key={u.id} divider={true}>
                         <ListItemText id={"switch-list-label-" + u.id} primary={u.email} />
