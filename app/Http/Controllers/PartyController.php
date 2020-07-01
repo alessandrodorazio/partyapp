@@ -215,8 +215,12 @@ class PartyController extends Controller
         $seconds = $duration[3] . $duration[4];
 
         $timeNextSong = Carbon::createFromFormat('Y-m-d H:i:s', $previousSong->pivot->start)->addMinutes($minutes)->addSeconds($seconds)->addSeconds(5);
-
-        $party->songs()->updateExistingPivot($song->id, ['start' => $timeNextSong]);
+        $now = Carbon::now();
+        if ($timeNextSong < $now) {
+            $party->songs()->updateExistingPivot($song->id, ['start' => $now]);
+        } else {
+            $party->songs()->updateExistingPivot($song->id, ['start' => $timeNextSong]);
+        }
 
         $song = $party->songs()->wherePivotNotNull('start')->orderBy('party_songs.start', 'desc')->first();
 
