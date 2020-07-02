@@ -25,12 +25,25 @@ const RenderRow = ({ index, style, items }) => {
         </ListItem>
     );
 };
+
 const Party = () => {
     const classes = useStyles();
     const { partyId } = useParams();
     const [users, setUsers] = useState([]);
     const [playlist, setPlaylist] = useState({});
     const [queue, setQueue] = useState([]);
+    const [startAt, setStartAt] = useState();
+
+    const getStartTime = (startedAt) => {
+        const timeArray = Array.from(startedAt);
+        const minutes = parseInt(timeArray[3] + timeArray[4], 10);
+        const seconds = parseInt(timeArray[6] + timeArray[7], 10);
+        const date = Array.from(new Date().toLocaleTimeString());
+        const minutesNow = parseInt(`${date[3] + date[4]}`, 10);
+        const secondsNow = parseInt(`${date[6] + date[7]}`, 10);
+
+        return (minutesNow - minutes) * 60 + (secondsNow - seconds);
+    };
 
     useEffect(() => {
         (async () => {
@@ -73,13 +86,9 @@ const Party = () => {
         const regexp = /[0-9]{2}:[0-9]{2}:[0-9]{2}/;
         if (queue && queue[0]) {
             let time = queue[0].pivot.start.match(regexp)[0];
-            console.log(time);
+            setStartAt(getStartTime(time));
         }
     }, [queue]);
-
-    useEffect(() => console.log(users.length * 46), [users]);
-
-    //const [users, setUsers] = useState([]);
 
     return (
         <div
@@ -103,7 +112,9 @@ const Party = () => {
                     </FixedSizeList>
                 </div>
             )}
-            <Player song={"prova"} />
+            {queue[0] && (
+                <Player song={queue[0].link.replace("https://www.youtube.com/watch?v=", "")} startAt={startAt} />
+            )}
         </div>
     );
 };

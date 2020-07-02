@@ -22,5 +22,8 @@ export const APIs = {
         following: BASE_URL + "users/follows/following",
         search: BASE_URL + "users/search/"
     },
-    genres: BASE_URL + "genres"
+    genres: BASE_URL + "genres",
+    songs: {
+        youtube: BASE_URL + "songs/youtube/search"
+    }
 };

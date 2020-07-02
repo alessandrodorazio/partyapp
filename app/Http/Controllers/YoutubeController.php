@@ -24,7 +24,7 @@ class YoutubeController extends Controller
 
                 //salviamo la canzone nel db
                 $song = new Song;
-                $song->title = $video->snipper->title;
+                $song->title = $video->snippet->title;
                 $song->link = $param;
                 $song->duration = $video->contentDetails->duration;
                 $song->duration = '0' . $song->duration[2] . ':' . $song->duration[4] . $song->duration[5];

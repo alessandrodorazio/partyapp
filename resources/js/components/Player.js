@@ -19,14 +19,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Player = ({ song }) => {
+const Player = ({ song, startAt }) => {
     const classes = useStyles();
 
     const [state, setState] = useState(true);
     const [player, setPlayer] = useState(null);
     const [value, setValue] = useState(50);
-
-    let code = "https://www.youtube.com/watch?v=RZhGITHIbns".replace("https://www.youtube.com/watch?v=", "");
 
     const playPause = () => {
         if (player) {
@@ -58,10 +56,11 @@ const Player = ({ song }) => {
             <div style={{ alignItems: "center" }}>
                 <div style={{ position: "absolute" }}>
                     <YouTube
-                        videoId="2MtOpB5LlUA"
+                        videoId={song}
                         opts={opts}
                         onReady={(e) => {
                             setPlayer(e.target);
+                            e.target.seekTo(startAt, true);
                             e.target.setVolume(50);
                         }}
                     />

@@ -73,3 +73,11 @@ export const fetchApi = async ({ url, body, method }) => {
         body: jsonResponse
     };
 };
+
+export const convertTime = (time) => {
+    const timeArray = Array.from(time);
+    if (timeArray[timeArray.length - 1] === "S") {
+        return `${timeArray[0] + timeArray[1]}:0${timeArray[3]}`;
+    }
+    return time;
+};

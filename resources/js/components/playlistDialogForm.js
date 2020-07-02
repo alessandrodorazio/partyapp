@@ -6,13 +6,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import { APIs } from "../constants/requests";
-import { fetchApi } from "../utilities/functions";
+import { fetchApi, convertTime } from "../utilities/functions";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles((theme) => ({
     selector: {
@@ -20,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     },
     bigInput: {
         width: "100%"
+    },
+    songlist: {
+        backgroundColor: theme.palette.background.paper
     }
 }));
 
@@ -35,6 +41,7 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
     const [playlistName, setPlaylistName] = useState("");
     const [genres, setGenres] = useState([]);
     const [songName, setSongName] = useState("");
+    const [songs, setSongs] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -52,11 +59,34 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
         })();
     }, []);
 
+    const addSong = async () => {
+        const request = {
+            url: APIs.songs.youtube,
+            method: "POST",
+            body: {
+                param: songName
+            }
+        };
+
+        const response = await fetchApi(request);
+
+        if (response.ok) {
+            setSongs((prev) => {
+                return [...prev, response.body];
+            });
+            setSongName("");
+        }
+    };
+
     const submitPlaylist = async () => {
+        const songsIds = songs.map((song) => song.id);
+
         const body = {
             genre_id: genre,
-            name: playlistName
+            name: playlistName,
+            songs: JSON.stringify(songsIds)
         };
+
         const response = await fetchApi({
             url: APIs.playlists.all,
             method: "POST",
@@ -128,9 +158,19 @@ const PlaylistDialogForm = ({ open, setOpen, playlist, handlePlaylistClick, setC
                             value={songName}
                             onChange={(event) => setSongName(event.target.value)}
                         />
-                        <IconButton>
+                        <IconButton onClick={addSong}>
                             <PlaylistAddIcon />
                         </IconButton>
+                    </div>
+                    <div className={classes.songlist}>
+                        <List dense={false}>
+                            {songs[0] &&
+                                songs.map((song) => (
+                                    <ListItem>
+                                        <ListItemText primary={song.title} secondary={convertTime(song.duration)} />
+                                    </ListItem>
+                                ))}
+                        </List>
                     </div>
                 </div>
                 <DialogContentText id="alert-dialog-slide-description"></DialogContentText>
