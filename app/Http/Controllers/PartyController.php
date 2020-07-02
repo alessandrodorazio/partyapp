@@ -216,6 +216,9 @@ class PartyController extends Controller
 
         $timeNextSong = Carbon::createFromFormat('Y-m-d H:i:s', $previousSong->pivot->start)->addMinutes($minutes)->addSeconds($seconds)->addSeconds(5);
         $now = Carbon::now();
+        if (!$song) {
+            return (new Responser())->success()->showMessage()->message('Party concluso')->response();
+        }
         if ($timeNextSong < $now) {
             $party->songs()->updateExistingPivot($song->id, ['start' => $now]);
         } else {
