@@ -192,7 +192,7 @@ class PartyController extends Controller
             if ($party->party_type === 1) { //battle
                 //selezioniamo la canzone passata tramite richiesta HTTP
                 $song = $party->songs()->wherePivot('start', null)->orderBy('party_songs.votes', 'desc')->first();
-                $party->songs()->syncWithoutDetaching($song_id);
+                $party->songs()->syncWithoutDetaching($song->id);
                 $nextSong = true;
             } else { //democracy
                 //canzone più votata
