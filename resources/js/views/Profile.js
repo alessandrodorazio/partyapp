@@ -165,21 +165,21 @@ const Profile = () => {
                     </Grid>
                     <Grid item md={8}>
                         <FollowBox />
-                        <PartyDialogForm
-                            open={openParty}
-                            setOpen={setOpenParty}
-                            moods={state.moods}
-                            playlists={state.playlists}
-                            setCreated={setPartyCreated}
-                        />
-                        <PlaylistDialogForm
-                            open={openPlaylist}
-                            setOpen={setOpenPlaylist}
-                            playlist={playlist}
-                            setCreated={setPlaylistCreated}
-                        />
                     </Grid>
                 </Grid>
+                <PartyDialogForm
+                    open={openParty}
+                    setOpen={setOpenParty}
+                    moods={state.moods}
+                    playlists={state.playlists}
+                    setCreated={setPartyCreated}
+                />
+                <PlaylistDialogForm
+                    open={openPlaylist}
+                    setOpen={setOpenPlaylist}
+                    playlist={playlist}
+                    setCreated={setPlaylistCreated}
+                />
             </Container>
         </Box>
     );

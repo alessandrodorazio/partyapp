@@ -72,8 +72,10 @@ class PartyController extends Controller
         } else {
             $owner_id = Auth::id();
             $user = User::find($owner_id);
-            $user->points += 75;
-            $user->save();
+            if ($user) {
+                $user->points += 75;
+                $user->save();
+            }
         }
         $mood_id = $request->mood_id;
 

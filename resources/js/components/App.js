@@ -8,10 +8,16 @@ import { fetchApi } from "../utilities/functions";
 import { APIs } from "../constants/requests";
 import Appbar from "../components/Appbar";
 import Party from "../views/Party";
-import { createMuiTheme, Box } from "@material-ui/core";
+import { createMuiTheme, Box, MuiThemeProvider } from "@material-ui/core";
+import { blue, red } from "@material-ui/core/colors";
 
 localStorage.setItem("CSRF", document.head.querySelector("[name~=csrf-token][content]").content);
-
+const darkTheme = createMuiTheme({
+    palette: {
+        type: "dark",
+        primary: red
+    }
+});
 function App(props) {
     const [firstRender, setFirstRender] = useState(true);
     const [logged, setLogged] = useState(false);
@@ -37,16 +43,18 @@ function App(props) {
 
     return (
         <Router>
-            <Appbar logged={logged} setLogged={setLogged} setOpenAuth={setOpenAuth} />
-            <Switch>
-                <Route
-                    exact
-                    path="/"
-                    render={() => <Home openAuth={openAuth} setLogged={setLogged} setOpenAuth={setOpenAuth} />}
-                />
-                <Route exact path="/profile" component={Profile} />
-                <Route exact path="/parties/:partyId" component={Party} />
-            </Switch>
+            <MuiThemeProvider theme={darkTheme}>
+                <Appbar logged={logged} setLogged={setLogged} setOpenAuth={setOpenAuth} />
+                <Switch>
+                    <Route
+                        exact
+                        path="/"
+                        render={() => <Home openAuth={openAuth} setLogged={setLogged} setOpenAuth={setOpenAuth} />}
+                    />
+                    <Route exact path="/profile" component={Profile} />
+                    <Route exact path="/parties/:partyId" component={Party} />
+                </Switch>
+            </MuiThemeProvider>
         </Router>
     );
 }

@@ -8,7 +8,8 @@ import { makeStyles } from "@material-ui/core";
 import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import PartyUsersList from "./PartyUsersList";
-
+import GroupIcon from "@material-ui/icons/Group";
+import ShareIcon from "@material-ui/icons/Share";
 const types = [
     {
         id: 1,
@@ -107,12 +108,8 @@ const PartyCard = ({ parties, found }) => {
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
                                 <div className="party-details">
-                                    <Typography>
-                                        {"Partecipanti: " +
-                                            party.countParticipants +
-                                            ", link di adesione: " +
-                                            party.link}
-                                    </Typography>
+                                    <Typography>{party.countParticipants} partecipanti</Typography>
+                                    <Typography>{party.link}</Typography>
                                     <PartyUsersList
                                         users={
                                             participants && participants.length[0] && participants.find

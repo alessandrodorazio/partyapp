@@ -56,7 +56,7 @@ const Appbar = ({ logged, setLogged, setOpenAuth }) => {
                         </a>
                     </Typography>
                     {logged ? (
-                        <Fragment>
+                        <div>
                             <Button color="inherit" onClick={() => history.push("/profile")}>
                                 <Typography>
                                     <AccountCircleIcon />
@@ -67,7 +67,7 @@ const Appbar = ({ logged, setLogged, setOpenAuth }) => {
                                     <ExitToApp />
                                 </Typography>
                             </Button>
-                        </Fragment>
+                        </div>
                     ) : (
                         <Button color="inherit" onClick={() => setOpenAuth(true)}>
                             <Typography>

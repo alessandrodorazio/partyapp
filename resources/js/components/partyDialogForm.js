@@ -87,7 +87,7 @@ const PartyDialogForm = ({ open, setOpen, moods, setCreated, playlists }) => {
         if (response.ok) {
             setCreated(true);
         } else {
-            alert("errore durante la creazione del party");
+            alert("Si è verificato un errore durante la creazione del party");
         }
 
         setOpen(false);

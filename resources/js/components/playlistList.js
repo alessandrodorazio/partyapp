@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ReactSVG } from "react-svg";
 import IconButton from "@material-ui/core/IconButton";
 import music from "../../assets/svg/music.svg";
-import { Typography, Card, CardHeader } from "@material-ui/core";
+import { Typography, Card, CardHeader, LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const PlaylistList = ({ playlists, changePlaylistClick, found }) => {
+const PlaylistList = ({ playlists, changePlaylistClick, found, deleteIcon = true }) => {
     const classes = useStyles();
 
     const [dense, setDense] = useState(false);
@@ -49,9 +49,13 @@ const PlaylistList = ({ playlists, changePlaylistClick, found }) => {
                                         </Avatar>
                                     }
                                     action={
-                                        <IconButton aria-label="settings">
-                                            <DeleteIcon />
-                                        </IconButton>
+                                        deleteIcon == true ? (
+                                            <IconButton aria-label="settings">
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        ) : (
+                                            <></>
+                                        )
                                     }
                                     title={playlist.name}
                                     subheader={playlist.genre.name + ", " + playlist.songsCount + " canzoni totali"}
@@ -60,10 +64,10 @@ const PlaylistList = ({ playlists, changePlaylistClick, found }) => {
                         ))}
                     </List>
                 ) : (
-                    <Typography style={{ backgroundColor: "#f5f5f5" }}>caricamento delle playlist</Typography>
+                    <LinearProgress />
                 )
             ) : (
-                <Typography style={{ backgroundColor: "#f5f5f5" }}>non hai creato playlist</Typography>
+                <Typography>Nessuna playlist trovata. Controlla se hai effettuato l'accesso!</Typography>
             )}
         </div>
     );
