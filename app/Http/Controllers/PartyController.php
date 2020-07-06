@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PartyController extends Controller
 {
@@ -135,8 +136,15 @@ class PartyController extends Controller
 
         return (new Responser())->success()->item('party', $party)->item('next_song', $firstSong)->response();
     }
+    public function closeParty($party_id)
+    {
+        DB::table('party_songs')->where('party_id', $party_id)->update(['start' => Carbon::now()]);
+        return (new Responser())->success()->showMessage()->message('Il tuo party è stato concluso')->response();
+    }
+
 
     //seleziona canzoni per la battle
+
     public function randomSongsBattle($party_id)
     {
         $party = Party::find($party_id);
@@ -252,5 +260,40 @@ class PartyController extends Controller
         $songs = $playlist->songs()->get();
         $pdf = PDF::loadView('party.export.copyright', ['user' => $user, 'party' => $party, 'playlist' => $playlist, 'songs' => $songs]);
         return $pdf->download('invoice.pdf');
+    }
+    //visualizzazione party di utenti che seguo che non sono ancora iniziati
+    public function upcomingParties()
+    {
+
+        $user = User::find(Auth::id());
+        $followingUser =  $user->following()->get();
+        $parties = [];
+        foreach ($followingUser as $user) {
+            $partiesApp = $user->parties()->get();
+            foreach ($partiesApp as $party) {
+                if ($party->songs()->count() == 0) {
+                    $parties[] = $party;
+                }
+            }
+        }
+        return $parties;
+    }
+    //visualizzazione party di utenti che seguo che non sono già iniziati
+    public function startedParties()
+    {
+
+        $user = User::find(Auth::id());
+        $followingUser =  $user->following()->get();
+
+        $parties = [];
+        foreach ($followingUser as $user) {
+            $partiesApp = $user->parties()->get();
+            foreach ($partiesApp as $party) {
+                if ($party->songs()->wherePivot('start', null)->count() > 0) {
+                    $parties[] = $party;
+                }
+            }
+        }
+        return $parties;
     }
 }
