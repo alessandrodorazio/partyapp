@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
@@ -25,10 +25,18 @@ const Player = ({ song, startAt }) => {
     const [state, setState] = useState(true);
     const [player, setPlayer] = useState(null);
     const [value, setValue] = useState(50);
+    const [startDate, setStartDate] = useState(new Date());
+
+    useEffect(() => {
+        setStartDate(new Date());
+    }, [song]);
 
     const playPause = () => {
         if (player) {
             if (!state) {
+                const now = new Date();
+                const elapsedTime = Math.round((now - startDate) / 1000);
+                player.seekTo(startAt + elapsedTime, true);
                 player.playVideo();
             } else {
                 player.pauseVideo();
@@ -54,12 +62,13 @@ const Player = ({ song, startAt }) => {
     return (
         <div style={styles.root}>
             <div style={{ alignItems: "center" }}>
-                <div style={{ position: "absolute" }}>
+                <div style={{ position: "absolute", top: "50%", right: "50%" }}>
                     <YouTube
                         videoId={song}
                         opts={opts}
                         onReady={(e) => {
                             setPlayer(e.target);
+                            e.target.pauseVideo();
                             e.target.seekTo(startAt, true);
                             e.target.setVolume(50);
                         }}

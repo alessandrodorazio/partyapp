@@ -35,6 +35,7 @@ function App(props) {
                 const me = await fetchApi(meRequest);
 
                 if (me.ok && Object.keys(me.body).length > 0) {
+                    localStorage.setItem("loggedId", me.body.id);
                     setLogged(true);
                 }
             }
