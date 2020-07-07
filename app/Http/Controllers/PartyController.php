@@ -142,13 +142,12 @@ class PartyController extends Controller
         return (new Responser())->success()->showMessage()->message('Il tuo party è stato concluso')->response();
     }
 
-
     //seleziona canzoni per la battle
 
     public function randomSongsBattle($party_id)
     {
         $party = Party::find($party_id);
-        $songsForBattle = $party->songs()->wherePivot('start', null)->inRandomOrder()->limit(2)->get();
+        $songsForBattle = $party->songs()->wherePivot('start', null)->limit(2)->get();
         return $songsForBattle;
     }
 
@@ -266,7 +265,7 @@ class PartyController extends Controller
     {
 
         $user = User::find(Auth::id());
-        $followingUser =  $user->following()->get();
+        $followingUser = $user->following()->get();
         $parties = [];
         foreach ($followingUser as $user) {
             $partiesApp = $user->parties()->get();
@@ -283,7 +282,7 @@ class PartyController extends Controller
     {
 
         $user = User::find(Auth::id());
-        $followingUser =  $user->following()->get();
+        $followingUser = $user->following()->get();
 
         $parties = [];
         foreach ($followingUser as $user) {
