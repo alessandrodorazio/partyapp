@@ -40,7 +40,7 @@ const UserList = ({ value, searched }) => {
                 alert(userResponse.status);
                 return;
             }
-            setUsers(userResponse.body.following.data);
+            setUsers(userResponse.body.following);
         })();
     }, [value, searched]);
 
@@ -51,8 +51,6 @@ const UserList = ({ value, searched }) => {
             setChecked(check);
         }
     }, [users]);
-
-    console.log("render");
 
     const handleToggle = (value) => async () => {
         const currentIndex = checked.indexOf(value);
