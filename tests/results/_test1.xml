@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="tests/Feature/." tests="30" assertions="38" errors="0" warnings="0" failures="0" skipped="0" time="1.109216">
+    <testsuite name="Tests\Feature\AuthenticationTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/AuthenticationTest.php" tests="4" assertions="10" errors="0" warnings="0" failures="0" skipped="0" time="0.648148">
+      <testcase name="registerTestEmail" class="Tests\Feature\AuthenticationTest" classname="Tests.Feature.AuthenticationTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/AuthenticationTest.php" line="17" assertions="3" time="0.339567"/>
+      <testcase name="it_will_register_a_user" class="Tests\Feature\AuthenticationTest" classname="Tests.Feature.AuthenticationTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/AuthenticationTest.php" line="37" assertions="3" time="0.097897"/>
+      <testcase name="it_will_log_a_user_in" class="Tests\Feature\AuthenticationTest" classname="Tests.Feature.AuthenticationTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/AuthenticationTest.php" line="53" assertions="3" time="0.093761"/>
+      <testcase name="it_will_not_log_an_invalid_user_in" class="Tests\Feature\AuthenticationTest" classname="Tests.Feature.AuthenticationTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/AuthenticationTest.php" line="68" assertions="1" time="0.116923"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\ExampleTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.024196">
+      <testcase name="testBasicTest" class="Tests\Feature\ExampleTest" classname="Tests.Feature.ExampleTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/ExampleTest.php" line="14" assertions="1" time="0.024196"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\PartyIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyIndexTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.043887">
+      <testcase name="testBasicTest" class="Tests\Feature\PartyIndexTest" classname="Tests.Feature.PartyIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyIndexTest.php" line="15" assertions="1" time="0.008560"/>
+      <testcase name="testIndexOk" class="Tests\Feature\PartyIndexTest" classname="Tests.Feature.PartyIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyIndexTest.php" line="22" assertions="1" time="0.035327"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\Party\PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" tests="7" assertions="7" errors="0" warnings="0" failures="0" skipped="0" time="0.151905">
+      <testcase name="testBasicTest" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="17" assertions="1" time="0.007857"/>
+      <testcase name="testPartyStart" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="24" assertions="1" time="0.038766"/>
+      <testcase name="testGetQueue" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="36" assertions="1" time="0.012773"/>
+      <testcase name="testApproveSong" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="43" assertions="1" time="0.013296"/>
+      <testcase name="testRandomSongs" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="52" assertions="1" time="0.012209"/>
+      <testcase name="testSuggestSongOk" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="58" assertions="1" time="0.011790"/>
+      <testcase name="testSuggestSongWrong" class="Tests\Feature\Party\PartyStartTest" classname="Tests.Feature.Party.PartyStartTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStartTest.php" line="65" assertions="1" time="0.055214"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" tests="7" assertions="7" errors="0" warnings="0" failures="0" skipped="0" time="0.097403">
+      <testcase name="testStoreOk" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="16" assertions="1" time="0.030919"/>
+      <testcase name="testStoreWrongPartyType" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="26" assertions="1" time="0.009752"/>
+      <testcase name="testStoreWrongPrivateParty" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="37" assertions="1" time="0.008369"/>
+      <testcase name="testStoreWithoutPrivateParty" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="43" assertions="1" time="0.018022"/>
+      <testcase name="testStoreWrongOwner" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="49" assertions="1" time="0.010077"/>
+      <testcase name="testStoreWithoutOwner" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="57" assertions="1" time="0.011549"/>
+      <testcase name="testStoreWithoutMood" class="Tests\Feature\PartyStoreTest" classname="Tests.Feature.PartyStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Party/PartyStoreTest.php" line="63" assertions="1" time="0.008715"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\Playlist\PlaylistIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistIndexTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.029073">
+      <testcase name="testIndexOk" class="Tests\Feature\Playlist\PlaylistIndexTest" classname="Tests.Feature.Playlist.PlaylistIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistIndexTest.php" line="15" assertions="1" time="0.029073"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\Playlist\PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" tests="5" assertions="5" errors="0" warnings="0" failures="0" skipped="0" time="0.058135">
+      <testcase name="testStoreWithoutSongs" class="Tests\Feature\Playlist\PlaylistStoreTest" classname="Tests.Feature.Playlist.PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" line="15" assertions="1" time="0.016099"/>
+      <testcase name="testStoreWithSongs" class="Tests\Feature\Playlist\PlaylistStoreTest" classname="Tests.Feature.Playlist.PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" line="22" assertions="1" time="0.015970"/>
+      <testcase name="testStoreWithoutName" class="Tests\Feature\Playlist\PlaylistStoreTest" classname="Tests.Feature.Playlist.PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" line="35" assertions="1" time="0.007358"/>
+      <testcase name="testStoreWithoutOwner" class="Tests\Feature\Playlist\PlaylistStoreTest" classname="Tests.Feature.Playlist.PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" line="47" assertions="1" time="0.010240"/>
+      <testcase name="testStoreWithoutGenre" class="Tests\Feature\Playlist\PlaylistStoreTest" classname="Tests.Feature.Playlist.PlaylistStoreTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/Playlist/PlaylistStoreTest.php" line="59" assertions="1" time="0.008468"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\User\UserIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/User/UserIndexTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.015896">
+      <testcase name="testIndexOk" class="Tests\Feature\User\UserIndexTest" classname="Tests.Feature.User.UserIndexTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/User/UserIndexTest.php" line="16" assertions="1" time="0.015896"/>
+    </testsuite>
+    <testsuite name="Tests\Feature\User\UserShowTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/User/UserShowTest.php" tests="2" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="0.040574">
+      <testcase name="testShowUserOk" class="Tests\Feature\User\UserShowTest" classname="Tests.Feature.User.UserShowTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/User/UserShowTest.php" line="17" assertions="2" time="0.032893"/>
+      <testcase name="testShowUserFail" class="Tests\Feature\User\UserShowTest" classname="Tests.Feature.User.UserShowTest" file="/Users/alessandrodorazio/.jenkins/workspace/PartyApp/tests/Feature/User/UserShowTest.php" line="23" assertions="2" time="0.007681"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

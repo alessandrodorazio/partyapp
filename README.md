@@ -16,3 +16,11 @@ Tramite `php artisan migrate:fresh --seed` viene configurato il database e vengo
 ## Lancio dell'app
 
 Lanciare `npm run prod`, successivamente `php artisan serve`. L'app sarà visibile all'url 127.0.0.1:8000
+
+# Risultati dei test
+
+L'ultimo risultato dei test è visibile in /tests/results/\_test1.xml
+
+# Export Git
+
+Vedere /gitlogs.txt
