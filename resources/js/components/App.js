@@ -37,6 +37,26 @@ function App(props) {
                 if (me.ok && Object.keys(me.body).length > 0) {
                     localStorage.setItem("loggedId", me.body.id);
                     setLogged(true);
+                } else {
+                    refresh = await fetch(APIs.auth.refresh, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": localStorage.getItem("CSRF"),
+                            Authorization: "Bearer " + localStorage.getItem(constants.TOKEN)
+                        }
+                    });
+
+                    try {
+                        jsonRefresh = await refresh.json();
+                    } catch {
+                        setLogged(false);
+                    }
+                    localStorage.setItem(constants.TOKEN, jsonRefresh.access_token);
+                    const meAgain = await fetchApi(meRequest);
+                    if (meAgain.ok && Object.keys(meAgain.body).length > 0) {
+                        localStorage.setItem("loggedId", meAgain.body.id);
+                        setLogged(true);
+                    }
                 }
             }
         })();

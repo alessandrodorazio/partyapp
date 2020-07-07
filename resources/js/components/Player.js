@@ -9,7 +9,7 @@ import VolumeUp from "@material-ui/icons/VolumeUp";
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        color: "#3f51b5",
+        color: "#f44336",
         height: 60,
         width: 60
     },
@@ -103,7 +103,7 @@ const styles = {
         width: 500,
         borderRadius: 4,
         borderColor: "#efefef",
-        backgroundColor: "white",
+        backgroundColor: "#323232",
         webKitBoxShadow: "2px 3px 5px 0px rgba(0,0,0,0.75)",
         MozBoxShadow: "2px 3px 5px 0px rgba(0,0,0,0.75)",
         boxShadow: "2px 3px 5px 0px rgba(0,0,0,0.75)",

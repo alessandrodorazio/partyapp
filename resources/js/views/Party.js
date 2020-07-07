@@ -24,7 +24,7 @@ const RenderRow = ({ index, style, items }) => {
 
     return (
         <ListItem button style={style} key={item.user_id}>
-            <ListItemText primary={item.username} />
+            <ListItemText style={{ color: "white" }} primary={`${item.username} ${item.title}`} />
         </ListItem>
     );
 };
@@ -164,13 +164,25 @@ const Party = () => {
             style={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-between",
-                height: users.length < 4 ? users.length * 46 : 184
+                justifyContent: "space-evenly",
+                paddingTop: 20
             }}
         >
-            {playlist[0] && <PartyPlaylist songs={playlist} democracy={democracy} partyId={partyId} />}
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                }}
+            >
+                {playlist[0] && <PartyPlaylist songs={playlist} democracy={democracy} partyId={partyId} />}
+                {isOwner && <SuggestedList partyId={partyId} playlist={playlist} />}
+            </div>
+            {queue[0] && (
+                <Player song={queue[0].link.replace("https://www.youtube.com/watch?v=", "")} startAt={startAt} />
+            )}
             {users[0] && (
-                <div className={classes.root}>
+                <div className={classes.root} style={{ height: 0 }}>
                     <FixedSizeList
                         height={users.length < 4 ? users.length * 46 : 184}
                         width={300}
@@ -182,10 +194,6 @@ const Party = () => {
                     </FixedSizeList>
                 </div>
             )}
-            {queue[0] && (
-                <Player song={queue[0].link.replace("https://www.youtube.com/watch?v=", "")} startAt={startAt} />
-            )}
-            {isOwner && <SuggestedList partyId={partyId} playlist={playlist} />}
             {battleSongs[0] && <VoteBattle open={voting} setOpen={setVoting} partyId={partyId} songs={battleSongs} />}
         </div>
     );

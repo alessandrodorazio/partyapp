@@ -37,7 +37,7 @@ export const fetchApi = async ({ url, body, method }) => {
         refresh = await fetch(APIs.auth.refresh, {
             method: "POST",
             headers: {
-                "X-CSRF-TOKEN": csrf,
+                "X-CSRF-TOKEN": localStorage.getItem("CSRF"),
                 Authorization: "Bearer " + localStorage.getItem(constants.TOKEN)
             }
         });

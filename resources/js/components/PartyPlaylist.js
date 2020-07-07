@@ -28,14 +28,15 @@ const RenderRow = ({ items, index, style, democracy, partyId, suggested, setSugg
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
-                    maxWidth: 300
+                    maxWidth: 300,
+                    color: "white"
                 }}
             >
                 {item.title}
             </Typography>
             {democracy && !isSuggested && (
                 <IconButton
-                    style={{ marginRight: 3, height: 30, width: 30 }}
+                    style={{ marginRight: 3, height: 30, width: 30, color: "#f44336" }}
                     onClick={async () => {
                         const request = {
                             url: `${APIs.parties.all}/${partyId}/songs/${item.song_id}/suggest`,
@@ -68,7 +69,7 @@ const PartyPlaylist = ({ songs, democracy, partyId }) => {
     return (
         <FixedSizeList
             height={songs.length < 10 ? songs.length * 46 : 460}
-            width={500}
+            width={340}
             itemSize={46}
             className="list"
             itemCount={songs.length}
