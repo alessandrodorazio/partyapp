@@ -9,6 +9,8 @@ import { APIs } from "../constants/requests";
 import PlaylistList from "../components/playlistList";
 import FollowBox from "../components/FollowBox";
 import { Paper, Box, Typography, Grid, Container } from "@material-ui/core";
+import { constant } from "lodash";
+import EditPlaylist from "../components/EditPlaylist";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,6 +42,7 @@ const Profile = () => {
     const [partyCreated, setPartyCreated] = useState(false);
     const [playlistCreated, setPlaylistCreated] = useState(false);
     const [firstRender, setFirstRender] = useState(true);
+    const [openEdit, setOpenEdit] = useState(false);
 
     useEffect(() => {
         if (partyCreated || playlistCreated || firstRender) {
@@ -114,7 +117,7 @@ const Profile = () => {
 
     const handlePlaylistClick = (p) => {
         setPlaylist(p);
-        setOpenPlaylist(true);
+        setOpenEdit(true);
     };
 
     return (
@@ -178,6 +181,12 @@ const Profile = () => {
                     open={openPlaylist}
                     setOpen={setOpenPlaylist}
                     playlist={playlist}
+                    setCreated={setPlaylistCreated}
+                />
+                <EditPlaylist
+                    open={openEdit}
+                    setOpen={setOpenEdit}
+                    playlistId={playlist.id}
                     setCreated={setPlaylistCreated}
                 />
             </Container>

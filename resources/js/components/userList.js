@@ -54,14 +54,27 @@ const UserList = ({ value, searched }) => {
 
     console.log("render");
 
-    const handleToggle = (value) => () => {
-        console.log(value);
+    const handleToggle = (value) => async () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
 
         if (currentIndex === -1) {
+            const body = {
+                following: value
+            };
+            const request = {
+                url: `${APIs.users.follows}`,
+                method: "POST",
+                body: body
+            };
+            const response = await fetchApi(request);
             newChecked.push(value);
         } else {
+            const request = {
+                url: `${APIs.users.follows}`,
+                method: "DELETE"
+            };
+            const response = await fetchApi(request);
             newChecked.splice(currentIndex, 1);
         }
 

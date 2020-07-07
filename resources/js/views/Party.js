@@ -9,6 +9,7 @@ import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import PartyPlaylist from "../components/PartyPlaylist";
 import SuggestedList from "../components/SuggestedList";
+import VoteBattle from "../components/VoteBattle";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,6 +38,8 @@ const Party = () => {
     const [startAt, setStartAt] = useState();
     const [democracy, setDemocracy] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
+    const [voting, setVoting] = useState(false);
+    const [battleSongs, setBattleSongs] = useState([]);
 
     const getStartTime = (startedAt) => {
         const timeArray = Array.from(startedAt);
@@ -122,6 +125,40 @@ const Party = () => {
         }
     }, [queue]);
 
+    useEffect(() => {
+        if (democracy || !queue || !queue[0]) {
+            return;
+        }
+        const regexp = /[0-9]{2}:[0-9]{2}:[0-9]{2}/;
+        let time = queue[0].pivot.start.match(regexp)[0];
+        const elapsedTime = getStartTime(time);
+        setTimeout(async () => {
+            const request = {
+                url: `${APIs.parties.all}/${partyId}/battle/randomSongs`,
+                method: "GET"
+            };
+            const response = await fetchApi(request);
+            setBattleSongs(response.body);
+            setVoting(true);
+        }, (getQueueRefresh(queue[0].duration, elapsedTime) - 15) * 1000);
+    }, [queue]);
+
+    useEffect(() => {
+        if (!isOwner || !queue || !queue[0]) {
+            return;
+        }
+        const regexp = /[0-9]{2}:[0-9]{2}:[0-9]{2}/;
+        let time = queue[0].pivot.start.match(regexp)[0];
+        const elapsedTime = getStartTime(time);
+        setTimeout(async () => {
+            const request = {
+                url: `${APIs.parties.all}/${partyId}/addNextSong`,
+                method: "GET"
+            };
+            const response = await fetchApi(request);
+        }, (getQueueRefresh(queue[0].duration, elapsedTime) - 3) * 1000);
+    }, [queue]);
+
     return (
         <div
             style={{
@@ -149,6 +186,7 @@ const Party = () => {
                 <Player song={queue[0].link.replace("https://www.youtube.com/watch?v=", "")} startAt={startAt} />
             )}
             {isOwner && <SuggestedList partyId={partyId} playlist={playlist} />}
+            {battleSongs[0] && <VoteBattle open={voting} setOpen={setVoting} partyId={partyId} songs={battleSongs} />}
         </div>
     );
 };

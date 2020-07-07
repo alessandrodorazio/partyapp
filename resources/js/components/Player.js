@@ -68,7 +68,6 @@ const Player = ({ song, startAt }) => {
                         opts={opts}
                         onReady={(e) => {
                             setPlayer(e.target);
-                            e.target.pauseVideo();
                             e.target.seekTo(startAt, true);
                             e.target.setVolume(50);
                         }}
