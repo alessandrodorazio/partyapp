@@ -48,15 +48,6 @@ const PlaylistList = ({ playlists, changePlaylistClick, found, deleteIcon = true
                                             {playlist.name[0]}
                                         </Avatar>
                                     }
-                                    action={
-                                        deleteIcon == true ? (
-                                            <IconButton aria-label="settings">
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        ) : (
-                                            <></>
-                                        )
-                                    }
                                     title={playlist.name}
                                     subheader={playlist.genre.name + ", " + playlist.songsCount + " canzoni totali"}
                                 />

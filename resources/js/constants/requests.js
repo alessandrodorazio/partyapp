@@ -22,7 +22,8 @@ export const APIs = {
     users: {
         followers: BASE_URL + "users/follows/followers",
         following: BASE_URL + "users/follows/following",
-        search: BASE_URL + "users/search/"
+        search: BASE_URL + "users/search/",
+        follows: BASE_URL + "users/follows"
     },
     genres: BASE_URL + "genres",
     songs: {
