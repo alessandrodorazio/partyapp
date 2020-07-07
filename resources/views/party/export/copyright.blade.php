@@ -27,7 +27,6 @@
         <thead>
             <tr>
                 <th>Nome canzone</th>
-                <th>Autori</th>
             </tr>
         </thead>
         <tbody>

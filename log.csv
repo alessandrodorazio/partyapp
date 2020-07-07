@@ -1,0 +1,75 @@
+7a2e74c,Alessandro D'Orazio,7 minutes ago,Merge branch 'dev' of https://github.com/alessandrodorazio/partyapp into dev
+ef70bff,Alessandro D'Orazio,7 minutes ago,fix randomSongs
+5a41087,AndreaUni,21 hours ago,gestione party quasi completa
+c200bb7,Alessandro D'Orazio,22 hours ago,Merge branch 'dev' of https://github.com/alessandrodorazio/partyapp into dev
+457aded,Alessandro D'Orazio,22 hours ago,front end improvements
+64a8b31,gabriele,22 hours ago,api per chiudere i party e visualizzazione dei party dei seguiti
+9234007,Alessandro D'Orazio,5 days ago,fix battle
+f5d64e9,Alessandro D'Orazio,5 days ago,next song improvement
+ef8f482,AndreaUni,5 days ago,inserimento canzoni alla creazione della playlist e inizio sync party
+86a3819,AndreaUni,6 days ago,Auto stash before merge of "dev" and "origin/dev"
+5012d49,Alessandro D'Orazio,6 days ago,better auth/profile design
+2b90919,Alessandro D'Orazio,6 days ago,next song update
+416db86,Alessandro D'Orazio,6 days ago,enhancements party
+57ed6f6,Alessandro D'Orazio,6 days ago,queue fix
+fbac24f,Alessandro D'Orazio,6 days ago,fix queue
+50082ee,Alessandro D'Orazio,6 days ago,api fix
+13b9575,Alessandro D'Orazio,6 days ago,songs index
+b568ad2,AndreaUni,7 days ago,WIP: cose fronted
+30c6e19,gabriele,8 days ago,playlost random slection
+fc74ca1,Alessandro D'Orazio,8 days ago,fix playlist
+57f0fe4,gabriele,8 days ago,Merge remote-tracking branch 'origin/dev' into dev
+5bc414d,gabriele,8 days ago,modifica playlist
+25a159d,Alessandro D'Orazio,8 days ago,gamification, random playlist
+18933f1,Alessandro D'Orazio,8 days ago,tests
+bd87b91,Alessandro D'Orazio,8 days ago,fixing tests
+bb49277,Alessandro D'Orazio,8 days ago,consiglia canzoni, fix vari
+85394ad,AndreaUni,12 days ago,base del player per i party
+c5461cf,Alessandro D'Orazio,12 days ago,test fix
+5d4732f,Alessandro D'Orazio,12 days ago,party config, battle, democracy, removed authors,
+3260bfb,AndreaUni,12 days ago,Merge branch 'feature/userList' into dev
+e1fd376,Leonardo,12 days ago,le mie mani scrivono roba
+1cb183b,AndreaUni,13 days ago,cose da non pushare qui (pagina party)
+66727d6,AndreaUni,13 days ago,intermedio
+0de9125,AndreaUni,2 weeks ago,aggiunta la funzione di ricerca, servono modifiche al backend per follow
+5ec22e7,Leonardo,2 weeks ago,robbabbuona
+039753c,Alessandro D'Orazio,3 weeks ago,youtube support, removed authors and init sync
+d3ba5b4,Leonardo,3 weeks ago,wip: ricerca e lista utenti nel profilo
+c00951e,Andrea,3 weeks ago,Merge branch 'hotfix/profilePage' into dev
+c576ef3,Andrea,3 weeks ago,fix profilo
+66af7f0,Alessandro D'Orazio,4 weeks ago,Merge pull request #1 from alessandrodorazio/master
+1a45118,Andrea,4 weeks ago,fix vari
+1c65f89,Alessandro D'Orazio,4 weeks ago,sistema per seguire altri utenti
+3f4ad7b,Alessandro D'Orazio,4 weeks ago,gestione utenti e api generi musicali
+26db979,Andrea,4 weeks ago,Merge branch 'feature/frontEndAuth' into dev
+723b930,Andrea,4 weeks ago,aggiunto sistema di login nel frontend
+c678dc8,Andrea,4 weeks ago,WIPT: form di login/logout
+54c3695,Andrea,5 weeks ago,form di modifica/creazione playlist (incompleti)
+ea6affe,Andrea,5 weeks ago,rimosso commento inutile
+3431a01,Andrea,5 weeks ago,lista delle playlist + miglioramenti vari
+0953df5,Alessandro D'Orazio,5 weeks ago,auth fix
+c338af4,Alessandro D'Orazio,5 weeks ago,authentication fix
+ef5b1fb,Alessandro D'Orazio,5 weeks ago,UserParties/Playlists, Auth, PDF export, ChangePwd
+7f1fe0b,Alessandro D'Orazio,5 weeks ago,Authentication flow
+bdc1f4c,Andrea,6 weeks ago,chiamate alle api per mood/party(bisogna fare l'api giusta per i party)
+20aa57b,Alessandro D'Orazio,6 weeks ago,index party moods
+2697b1a,Alessandro D'Orazio,6 weeks ago,index, show, store and addSongs to playlist
+a2ef953,gabriele,6 weeks ago,playlist
+e27f8fb,gabriele,6 weeks ago,playlist
+1d360f4,gabriele,6 weeks ago,playlist
+5789f4f,Alessandro D'Orazio,6 weeks ago,Index test
+c1d4704,Alessandro D'Orazio,6 weeks ago,test file to create results folder
+0f9e18c,Alessandro D'Orazio,6 weeks ago,workspace gitignore
+53ba6ef,Leonardo,6 weeks ago,refactoring DialogForm
+a5f1837,Andrea,6 weeks ago,refactoring
+d0f8138,Alessandro D'Orazio,7 weeks ago,Merge branch 'master' of https://github.com/alessandrodorazio/partyapp
+2353645,Alessandro D'Orazio,7 weeks ago,testing
+6d80dfe,Andrea,7 weeks ago,sistemato css nella creazione del party
+9c13844,Alessandro D'Orazio,7 weeks ago,index, show and store party
+4d3b680,Andrea,7 weeks ago,navigazione fino a crea party + form per crearlo ma va rifinito il css
+6d0f40b,Andrea,7 weeks ago,WIP: codice intermedio
+79f7d8c,Andrea,7 weeks ago,cose
+817505b,Andrea,7 weeks ago,quasi impostato react
+881f8ce,Andrea,7 weeks ago,eslint/prettier
+9a6626f,Alessandro D'Orazio,7 weeks ago,partyapp
+7b76958,Alessandro D'Orazio,8 weeks ago,init laravel and db

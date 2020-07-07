@@ -7,7 +7,6 @@ use App\Song;
 
 class SongController extends Controller
 {
-    //
     public function index()
     {
         $songs = Song::all();

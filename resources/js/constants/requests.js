@@ -3,7 +3,9 @@ const BASE_URL = "http://127.0.0.1:8000/api/";
 export const APIs = {
     parties: {
         all: BASE_URL + "parties",
-        my: BASE_URL + "parties/myparties"
+        my: BASE_URL + "parties/myparties",
+        upcomingParties: BASE_URL + "parties/upcomingParties",
+        startedParties: BASE_URL + "parties/startedParties"
     },
     moods: BASE_URL + "moods",
     playlists: {

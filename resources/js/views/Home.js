@@ -7,6 +7,8 @@ import PlaylistList from "../components/playlistList";
 import { APIs } from "../constants/requests";
 import { fetchApi } from "../utilities/functions";
 import LogoImg from "../images/logo.png";
+import PartyCard from "../components/partyCard";
+
 const Home = ({ openAuth, setOpenAuth, setLogged }) => {
     const history = useHistory();
 
@@ -19,32 +21,21 @@ const Home = ({ openAuth, setOpenAuth, setLogged }) => {
     const [state, setState] = useState({
         moods: [],
         parties: [],
-        playlists: []
+        partiesStarted: [],
+        playlists: [],
+        me: {}
     });
     const [found, setFound] = useState({
         parties: true,
-        playlists: true
+        partiesStarted: true,
+        playlists: true,
+        me: false
     });
 
     useEffect(() => {
         (async () => {
-            const moodRequest = {
-                url: APIs.moods,
-                method: "GET"
-            };
-            const moodResponse = await fetchApi(moodRequest);
-
-            if (moodResponse.ok) {
-                setState((prevState) => {
-                    return {
-                        ...prevState,
-                        moods: moodResponse.body.party_moods
-                    };
-                });
-            }
-
             const partyRequest = {
-                url: APIs.parties.my,
+                url: APIs.parties.upcomingParties,
                 method: "GET"
             };
             const partyResponse = await fetchApi(partyRequest);
@@ -66,6 +57,53 @@ const Home = ({ openAuth, setOpenAuth, setLogged }) => {
                     });
                 }
             }
+
+            const partyStartedRequest = {
+                url: APIs.parties.startedParties,
+                method: "GET"
+            };
+            const partyStartedResponse = await fetchApi(partyStartedRequest);
+
+            if (partyStartedResponse.ok) {
+                if (partyStartedResponse.body.parties.data.length === 0) {
+                    setFound((prevState) => {
+                        return {
+                            ...prevState,
+                            partiesStarted: false
+                        };
+                    });
+                } else {
+                    setState((prevState) => {
+                        return {
+                            ...prevState,
+                            partiesStarted: partyStartedResponse.body.parties.data
+                        };
+                    });
+                }
+            }
+
+            const meRequest = {
+                url: APIs.auth.me,
+                method: "GET"
+            };
+            const meResponse = await fetchApi(meRequest);
+
+            if (meResponse.ok) {
+                console.log(meResponse.body);
+                setFound((prevState) => {
+                    return {
+                        ...prevState,
+                        me: true
+                    };
+                });
+                setState((prevState) => {
+                    return {
+                        ...prevState,
+                        me: meResponse.body
+                    };
+                });
+            }
+
             const playlistRequest = {
                 url: APIs.playlists.my,
                 method: "GET"
@@ -112,9 +150,30 @@ const Home = ({ openAuth, setOpenAuth, setLogged }) => {
                                         <Typography component={"h1"} variant={"h5"}>
                                             Party che stanno per iniziare
                                         </Typography>
+                                        <Box mt={3}>
+                                            <PartyCard parties={state.parties} found={found.parties} />
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Paper>
+
+                            <Box mt={3}>
+                                <Paper>
+                                    <Box p={3}>
+                                        <Box pb={3}>
+                                            <Typography component={"h1"} variant={"h5"}>
+                                                Party già iniziati
+                                            </Typography>
+                                            <Box mt={3}>
+                                                <PartyCard
+                                                    parties={state.partiesStarted}
+                                                    found={found.partiesStarted}
+                                                />
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Paper>
+                            </Box>
                         </Grid>
                         <Grid item md={4}>
                             <Paper>
@@ -137,11 +196,21 @@ const Home = ({ openAuth, setOpenAuth, setLogged }) => {
                                     <Box p={3}>
                                         <Box pb={3}>
                                             <Typography component={"h2"} variant={"h5"}>
-                                                Le info su di te
+                                                Le tue info
                                             </Typography>
                                         </Box>
                                         <Typography component={"h4"} variant={"h6"}>
-                                            Nome cognome
+                                            {state.me.hasOwnProperty("username")
+                                                ? "Ciao, " + state.me.username
+                                                : "Ciao!"}
+                                        </Typography>
+                                        <Typography component={"h6"} variant={"body1"}>
+                                            {state.me.hasOwnProperty("title")
+                                                ? "Hai " +
+                                                  state.me.points +
+                                                  " punti, il tuo titolo è: " +
+                                                  state.me.title
+                                                : ""}
                                         </Typography>
                                     </Box>
                                 </Paper>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\CollectionHelper;
 use App\Http\Responser;
 use App\Party;
 use App\PartyMood;
@@ -11,6 +12,7 @@ use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -275,7 +277,7 @@ class PartyController extends Controller
                 }
             }
         }
-        return $parties;
+        return (new Responser())->success()->showMessage()->message('Party che stanno per iniziare')->item('parties', \App\Helper\CollectionHelper::paginate(new Collection($parties), 10))->response();
     }
     //visualizzazione party di utenti che seguo che non sono già iniziati
     public function startedParties()
@@ -293,6 +295,6 @@ class PartyController extends Controller
                 }
             }
         }
-        return $parties;
+        return (new Responser())->success()->showMessage()->message('Party iniziati')->item('parties', \App\Helper\CollectionHelper::paginate(new Collection($parties), 10))->response();
     }
 }
