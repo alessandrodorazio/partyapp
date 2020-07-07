@@ -121,10 +121,6 @@ class PartyController extends Controller
     {
         //aggiunge le canzoni della playlist a "party_songs"
 
-        //TODO verifica che l'utente sia corretto
-
-        //TODO verifica che non ci sia nessuna canzone nel party, altrimenti significa che è iniziato
-
         $now = Carbon::now()->addHours(2);
 
         $party = Party::find($party_id);
@@ -166,7 +162,6 @@ class PartyController extends Controller
     //consiglia una canzone
     public function suggestSong($party_id, $song_id)
     {
-        //TODO verificare che non sia già stata consigliata
         $party = Party::find($party_id);
         $party->songs()->syncWithoutDetaching($song_id);
         $party->songs()->updateExistingPivot($song_id, ['approved' => 0]);
@@ -192,7 +187,6 @@ class PartyController extends Controller
     //imposta la prossima canzone, deve essere richiamata 20 secondi prima che la canzone debba iniziare
     public function addNextSong($party_id, $song_id = null)
     {
-        //TODO controllare se non c'è più nulla
         $party = Party::find($party_id);
         $nextSong = false;
 
@@ -256,7 +250,6 @@ class PartyController extends Controller
         $party = Party::find($party_id);
         $user = User::find($party->owner_id);
 
-        //TODO sync playlist e party
         $playlist = Playlist::find(129);
         $songs = $playlist->songs()->get();
         $pdf = PDF::loadView('party.export.copyright', ['user' => $user, 'party' => $party, 'playlist' => $playlist, 'songs' => $songs]);

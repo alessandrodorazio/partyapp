@@ -45,7 +45,6 @@ class Party extends Model
 
     public function getLinkAttribute()
     {
-        //TODO CUSTOM LINK
         return url('/parties/' . $this->id);
     }
 
